@@ -1,4 +1,4 @@
-do () -> # To not pollute the namespace
+do -> # To not pollute the namespace
   DEPENDENCIES = [
     require: 'btoa'
     npm: 'btoa@1.1.0'
