@@ -28,17 +28,17 @@ do -> # To not pollute the namespace
     string.indexOf(suffix, string.length - suffix.length) != -1
 
   baseDirectory = (directory) ->
-    directory = directory.split(path.sep)
-    assert.equal(directory[directory.length-1], 'node_modules')
-    directory[0..directory.length-2].join(path.sep)
+    directory = directory.split path.sep
+    assert.equal directory[directory.length-1], 'node_modules'
+    directory[0..directory.length-2].join path.sep
 
   for directory in process.mainModule.paths
-    directory = baseDirectory(directory)
-    if endsWith(directory, '.meteor')
+    directory = baseDirectory directory
+    if endsWith directory, '.meteor'
       workingDirectory = directory
       break
 
-  assert(workingDirectory)
+  assert workingDirectory
 
   future = require 'fibers/future'
 
