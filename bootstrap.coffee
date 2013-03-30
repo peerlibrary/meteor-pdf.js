@@ -42,6 +42,9 @@ do -> # To not pollute the namespace
 
   future = require 'fibers/future'
 
+  # We set PATH so that Meteor's node.js binary is used when compiling dependencies and not system's
+  process.env.PATH = "#{ path.dirname process.argv[0] }:" + process.env.PATH
+
   spawnSync = (file, args, options) ->
     wrapped = future.wrap (cb) ->
       options ?= {}
