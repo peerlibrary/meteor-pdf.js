@@ -30,7 +30,7 @@ do -> # To not pollute the namespace
   baseDirectory = (directory) ->
     directory = directory.split path.sep
     assert.equal directory[directory.length-1], 'node_modules'
-    directory[0..directory.length-2].join path.sep
+    directory[0...directory.length-1].join path.sep
 
   for directory in process.mainModule.paths
     directory = baseDirectory directory
