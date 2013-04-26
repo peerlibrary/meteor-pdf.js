@@ -1,0 +1,3 @@
+[submodule "pdf.js"]
+	path = pdf.js
+	url = git://github.com/peerlibrary/pdf.js.git
