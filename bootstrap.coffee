@@ -12,6 +12,7 @@ do -> # To not pollute the namespace
     require: 'pdf.js/src/core.js'
     # If dependency is updated, smart.json version should be updated, too
     # "node make.js buildnumber" returns the build number to be used
+    # git pdf.js submodule should be kept in sync, too
     npm: 'git://github.com/peerlibrary/pdf.js.git#d48097845fa4fb4e00fe895d0412872535ad0730'
   ,
     require: 'xmldom'

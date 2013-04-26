@@ -13,6 +13,7 @@ do -> # To not pollute the namespace
   DEBUG = false
 
   # Copy from pdf.js/make.js
+  # TODO: Verify if this is the best set of files for the server
   SRC_FILES = [
     'core.js',
     'util.js',
@@ -37,6 +38,7 @@ do -> # To not pollute the namespace
     'jbig2.js',
     'bidi.js',
     'metadata.js',
+    '../external/jpgjs/jpg.js',
   ]
 
   window = jsdom.jsdom().createWindow()
