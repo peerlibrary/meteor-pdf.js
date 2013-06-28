@@ -18,7 +18,10 @@ Npm.depends({
   canvas: "1.0.1",
   jsdom: "0.5.3",
   xmldom: "0.1.13",
-  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/d48097845fa4fb4e00fe895d0412872535ad0730"
+  // If dependency is updated, smart.json version should be updated, too
+  // "node make.js buildnumber" returns the build number to be used
+  // git pdf.js submodule should be kept in sync, too
+  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/8561d2646bd23796a01975e2236ba82c6b284652"
 });
 
 Package.on_use(function (api) {
@@ -32,11 +35,15 @@ Package.on_use(function (api) {
   // Copy from pdf.js/make.js
   // TODO: Verify if this is the best set of files for the client
   api.add_files([
+    'pdf.js/src/network.js',
+    'pdf.js/src/chunked_stream.js',
+    'pdf.js/src/pdf_manager.js',
     'pdf.js/src/core.js',
     'pdf.js/src/util.js',
     'pdf.js/src/api.js',
     'pdf.js/src/canvas.js',
     'pdf.js/src/obj.js',
+    'pdf.js/src/annotation.js',
     'pdf.js/src/function.js',
     'pdf.js/src/charsets.js',
     'pdf.js/src/cidmaps.js',
@@ -44,6 +51,7 @@ Package.on_use(function (api) {
     'pdf.js/src/crypto.js',
     'pdf.js/src/evaluator.js',
     'pdf.js/src/fonts.js',
+    'pdf.js/src/font_renderer.js',
     'pdf.js/src/glyphlist.js',
     'pdf.js/src/image.js',
     'pdf.js/src/metrics.js',

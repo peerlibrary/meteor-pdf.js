@@ -12,11 +12,15 @@ DEBUG = false
 # Copy from pdf.js/make.js
 # TODO: Verify if this is the best set of files for the server
 SRC_FILES = [
+  'network.js',
+  'chunked_stream.js',
+  'pdf_manager.js',
   'core.js',
   'util.js',
   'api.js',
   'canvas.js',
   'obj.js',
+  'annotation.js',
   'function.js',
   'charsets.js',
   'cidmaps.js',
@@ -24,6 +28,7 @@ SRC_FILES = [
   'crypto.js',
   'evaluator.js',
   'fonts.js',
+  'font_renderer.js',
   'glyphlist.js',
   'image.js',
   'metrics.js',
