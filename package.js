@@ -65,7 +65,7 @@ Package.on_use(function (api) {
 });
 
 Package.on_test(function (api) {
-  api.use(['pdf.js', 'tinytest', 'test-helpers'], ['client', 'server']);
+  api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript'], ['client', 'server']);
   api.use(['connect'], ['server']);
   api.add_files('tests.coffee', ['client', 'server']);
 });
