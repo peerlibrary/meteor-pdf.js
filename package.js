@@ -2,12 +2,30 @@ Package.describe({
   summary: "Meteor smart package for pdf.js"
 });
 
+// Initialization of environment
+(function () {
+  var path = Npm.require('path');
+
+  // We set PATH so that Meteor's node.js binary is used when compiling dependencies and not system's
+  process.env.PATH = path.dirname(process.argv[0]) + ':' + process.env.PATH;
+
+  // PKG_CONFIG_PATH for Mac OS X
+  process.env.PKG_CONFIG_PATH = (process.env.PKG_CONFIG_PATH ? process.env.PKG_CONFIG_PATH + ':' : '') + '/opt/X11/lib/pkgconfig';
+})();
+
+Npm.depends({
+  btoa: "1.1.0",
+  canvas: "1.0.1",
+  jsdom: "0.5.3",
+  xmldom: "0.1.13",
+  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/d48097845fa4fb4e00fe895d0412872535ad0730"
+});
+
 Package.on_use(function (api) {
   api.use('coffeescript', 'server');
   api.use('underscore', 'server');
 
   api.add_files([
-    'bootstrap.coffee',
     'server.coffee'
   ], 'server');
 
@@ -41,4 +59,9 @@ Package.on_use(function (api) {
     'pdf.js/src/worker_loader.js', // TODO: Is this OK to include? It just throws an error it seems when loading, but things work.
     'client.coffee'
   ], 'client');
+});
+
+Package.on_test(function (api) {
+  api.use(['pdf.js', 'tinytest', 'test-helpers'], ['client', 'server']);
+  api.add_files('tests.js', ['client', 'server']);
 });
