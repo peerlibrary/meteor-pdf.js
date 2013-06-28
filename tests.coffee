@@ -8,6 +8,11 @@ if Meteor.isServer
   pdfPath = Npm.resolve "pdf.js/web/#{ pdfFilename }"
   __meteor_bootstrap__.app.use testRoot, connect.static(path.dirname(pdfPath), {redirect: false})
 
+if Meteor.isClient and /PhantomJS/.test window.navigator.userAgent
+  # We disable worker on PhantomJS, it seems it is failing
+
+  PDFJS.disableWorker = true
+
 Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
   isDefined = false
   try
