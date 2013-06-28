@@ -4,5 +4,9 @@
   "homepage": "https://github.com/peerlibrary/meteor-pdf.js",
   "author": "The PeerLibrary Project",
   "version": "0.7.369.3",
-  "git": "https://github.com/peerlibrary/meteor-pdf.js.git"
+  "git": "https://github.com/peerlibrary/meteor-pdf.js.git",
+  "meteor": {
+    "branch": "peerlibrary",
+    "git": "https://github.com/peerlibrary/meteor.git"
+  }
 }
