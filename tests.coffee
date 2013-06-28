@@ -12,8 +12,8 @@ Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
   try
     PDFJS
     isDefined = true
-  catch e
-    test.isTrue isDefined, "PDFJS is not defined"
+
+  test.isTrue isDefined, "PDFJS is not defined"
 
   error = (message, exception) ->
     if exception
@@ -35,5 +35,8 @@ Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
       password: ''
   else
     pdf = "#{ testRoot }/#{ pdfFilename }"
+
+  processPDF = Meteor.bindEnvironment processPDF, (e) -> test.exception e, this
+  error = Meteor.bindEnvironment error, (e) -> test.exception e, this
 
   PDFJS.getDocument(pdf).then processPDF, error
