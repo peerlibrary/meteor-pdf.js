@@ -32,6 +32,10 @@ Package.on_use(function (api) {
     'server.coffee'
   ], 'server');
 
+  api.add_files([
+    'phantomjs.coffee'
+  ], 'client');
+
   // Copy from pdf.js/make.js
   // TODO: Verify if this is the best set of files for the client
   api.add_files([
