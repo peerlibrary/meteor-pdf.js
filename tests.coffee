@@ -32,6 +32,7 @@ Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
 
   processPDF = (pdf) ->
     test.equal pdf.numPages, 14
+    console.log Meteor.isServer, Meteor.isClient
     onComplete()
 
   if Meteor.isServer
