@@ -18,7 +18,6 @@ Npm.depends({
   canvas: "1.0.1",
   jsdom: "0.5.3",
   xmldom: "0.1.13",
-  connect: "0.2.0",
   'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/d48097845fa4fb4e00fe895d0412872535ad0730"
 });
 
