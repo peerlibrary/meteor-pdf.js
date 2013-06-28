@@ -28,11 +28,12 @@ Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
     test.equal pdf.numPages, 14
     onComplete()
 
-  pdf = "#{ testRoot }/#{ pdfFilename }"
   if Meteor.isServer
     fs = Npm.require 'fs'
     pdf =
       data: fs.readFileSync pdfPath
       password: ''
+  else
+    pdf = "#{ testRoot }/#{ pdfFilename }"
 
   PDFJS.getDocument(pdf).then processPDF, error
