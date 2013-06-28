@@ -18,6 +18,7 @@ Npm.depends({
   canvas: "1.0.1",
   jsdom: "0.5.3",
   xmldom: "0.1.13",
+  connect: "0.2.0",
   'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/d48097845fa4fb4e00fe895d0412872535ad0730"
 });
 
@@ -56,12 +57,16 @@ Package.on_use(function (api) {
     'pdf.js/src/bidi.js',
     'pdf.js/src/metadata.js',
     'pdf.js/src/../external/jpgjs/jpg.js',
-    'pdf.js/src/worker_loader.js', // TODO: Is this OK to include? It just throws an error it seems when loading, but things work.
+    'pdf.js/src/worker_loader.js' // TODO: Is this OK to include? It just throws an error on client when loading, but things work
+  ], 'client', {raw: true});
+
+  api.add_files([
     'client.coffee'
   ], 'client');
 });
 
 Package.on_test(function (api) {
   api.use(['pdf.js', 'tinytest', 'test-helpers'], ['client', 'server']);
-  api.add_files('tests.js', ['client', 'server']);
+  api.use(['connect'], ['server']);
+  api.add_files('tests.coffee', ['client', 'server']);
 });
