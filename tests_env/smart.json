@@ -1,0 +1,6 @@
+{
+  "meteor": {
+    "branch": "peerlibrary",
+    "git": "https://github.com/peerlibrary/meteor.git"
+  }
+}
