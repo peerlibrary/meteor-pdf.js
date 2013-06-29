@@ -1,11 +1,11 @@
 PDFJS = {}
 
-btoa = Npm.require('btoa')
-canvas = Npm.require('canvas')
-fs = Npm.require('fs')
-jsdom = Npm.require('jsdom')
-vm = Npm.require('vm')
-xmldom = Npm.require('xmldom')
+btoa = Npm.require 'btoa'
+canvas = Npm.require 'canvas'
+fs = Npm.require 'fs'
+jsdom = Npm.require 'jsdom'
+vm = Npm.require 'vm'
+xmldom = Npm.require 'xmldom'
 
 DEBUG = false
 
@@ -66,4 +66,5 @@ for file in SRC_FILES
 context.createScratchCanvas = (width, height) ->
   new canvas(width, height)
 
+PDFJS.canvas = canvas
 @PDFJS = PDFJS
