@@ -21,7 +21,7 @@ Npm.depends({
   // If dependency is updated, smart.json version should be updated, too
   // "node make.js buildnumber" returns the build number to be used
   // git pdf.js submodule should be kept in sync, too
-  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/8561d2646bd23796a01975e2236ba82c6b284652"
+  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/4e831233a447768ad2a7ab386ca2dceceb1e1aa5"
 });
 
 Package.on_use(function (api) {
