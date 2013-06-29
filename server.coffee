@@ -9,8 +9,9 @@ xmldom = Npm.require('xmldom')
 
 DEBUG = false
 
-# Copy from pdf.js/make.js
+# Based on web/viewer.html and pdf.js/make.js
 # TODO: Verify if this is the best set of files for the server
+# TODO: Add web/compatibility.js?
 SRC_FILES = [
   'network.js',
   'chunked_stream.js',
@@ -18,6 +19,7 @@ SRC_FILES = [
   'core.js',
   'util.js',
   'api.js',
+  'metadata.js',
   'canvas.js',
   'obj.js',
   'annotation.js',
@@ -36,11 +38,10 @@ SRC_FILES = [
   'pattern.js',
   'stream.js',
   'worker.js',
+  '../external/jpgjs/jpg.js',
   'jpx.js',
   'jbig2.js',
   'bidi.js',
-  'metadata.js',
-  '../external/jpgjs/jpg.js',
 ]
 
 window = jsdom.jsdom().createWindow()

@@ -36,8 +36,9 @@ Package.on_use(function (api) {
     'phantomjs.coffee'
   ], 'client');
 
-  // Copy from pdf.js/make.js
+  // Based on web/viewer.html and pdf.js/make.js
   // TODO: Verify if this is the best set of files for the client
+  // TODO: Add web/compatibility.js?
   api.add_files([
     'pdf.js/src/network.js',
     'pdf.js/src/chunked_stream.js',
@@ -45,6 +46,7 @@ Package.on_use(function (api) {
     'pdf.js/src/core.js',
     'pdf.js/src/util.js',
     'pdf.js/src/api.js',
+    'pdf.js/src/metadata.js',
     'pdf.js/src/canvas.js',
     'pdf.js/src/obj.js',
     'pdf.js/src/annotation.js',
@@ -63,11 +65,10 @@ Package.on_use(function (api) {
     'pdf.js/src/pattern.js',
     'pdf.js/src/stream.js',
     'pdf.js/src/worker.js',
+    'pdf.js/src/../external/jpgjs/jpg.js',
     'pdf.js/src/jpx.js',
     'pdf.js/src/jbig2.js',
     'pdf.js/src/bidi.js',
-    'pdf.js/src/metadata.js',
-    'pdf.js/src/../external/jpgjs/jpg.js',
     'pdf.js/src/worker_loader.js' // TODO: Is this OK to include? It just throws an error on client when loading, but things work
   ], 'client', {raw: true});
 
