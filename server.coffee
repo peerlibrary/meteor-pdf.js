@@ -66,5 +66,4 @@ for file in SRC_FILES
 context.createScratchCanvas = (width, height) ->
   new canvas(width, height)
 
-# Exports global variable
 @PDFJS = PDFJS
