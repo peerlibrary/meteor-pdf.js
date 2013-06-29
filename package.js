@@ -68,7 +68,7 @@ Package.on_use(function (api) {
     'pdf.js/src/bidi.js',
     'pdf.js/src/metadata.js',
     'pdf.js/src/../external/jpgjs/jpg.js',
-    //'pdf.js/src/worker_loader.js' // TODO: Is this OK to include? It just throws an error on client when loading, but things work
+    'pdf.js/src/worker_loader.js' // TODO: Is this OK to include? It just throws an error on client when loading, but things work
   ], 'client', {raw: true});
 
   api.add_files([
