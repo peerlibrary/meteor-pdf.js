@@ -63,8 +63,5 @@ for file in SRC_FILES
   content = fs.readFileSync path, 'utf8'
   vm.runInContext content, context, path
 
-context.createScratchCanvas = (width, height) ->
-  new canvas(width, height)
-
 PDFJS.canvas = canvas
 @PDFJS = PDFJS
