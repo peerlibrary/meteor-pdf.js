@@ -48,6 +48,7 @@ window = jsdom.jsdom().createWindow()
 window.btoa = btoa
 window.DOMParser = xmldom.DOMParser
 window.PDFJS = PDFJS
+window.Image = canvas.Image
 
 if DEBUG
   window.console = console
