@@ -25,21 +25,19 @@ Npm.depends({
 });
 
 Package.on_use(function (api) {
-  api.use('coffeescript', 'server');
-  api.use('underscore', 'server');
+  api.use(['coffeescript', 'underscore', 'fs'], 'server');
+
+  api.export('PDFJS');
 
   api.add_files([
     'server.coffee'
   ], 'server');
 
-  api.add_files([
-    'phantomjs.coffee'
-  ], 'client');
-
   // Based on web/viewer.html and pdf.js/make.js
   // TODO: Verify if this is the best set of files for the client
   // TODO: Add web/compatibility.js?
   api.add_files([
+    'client.js',
     'pdf.js/src/network.js',
     'pdf.js/src/chunked_stream.js',
     'pdf.js/src/pdf_manager.js',
@@ -68,17 +66,23 @@ Package.on_use(function (api) {
     'pdf.js/src/../external/jpgjs/jpg.js',
     'pdf.js/src/jpx.js',
     'pdf.js/src/jbig2.js',
-    'pdf.js/src/bidi.js',
-    'pdf.js/src/worker_loader.js' // TODO: Is this OK to include? It just throws an error on client when loading, but things work
-  ], 'client', {raw: true});
+    'pdf.js/src/bidi.js'
+  ], 'client', {bare: true});
 
   api.add_files([
-    'client.coffee'
-  ], 'client');
+    'pdf.js/src/worker_loader.js'
+  ], 'client', {isAsset: true});
 });
 
 Package.on_test(function (api) {
-  api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript'], ['client', 'server']);
-  api.use(['connect'], ['server']);
+  api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'fs'], ['client', 'server']);
   api.add_files('tests.coffee', ['client', 'server']);
+
+  api.add_files([
+    'phantomjs.coffee'
+  ], 'client');
+
+  api.add_files([
+    'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
+  ], 'client', {isAsset: true});
 });

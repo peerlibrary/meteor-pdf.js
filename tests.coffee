@@ -1,12 +1,8 @@
-testRoot = '/meteor-pdf.js/tests'
-pdfFilename = 'compressed.tracemonkey-pldi-09.pdf'
+testRoot = '/packages/pdf.js'
+pdfFilename = 'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
 
 if Meteor.isServer
-  # We have to serve PDF file locally, so that file is in the same origin domain, so that client can access it
-
-  path = Npm.require 'path'
-  pdfPath = Npm.resolve "pdf.js/web/#{ pdfFilename }"
-  __meteor_bootstrap__.app.use testRoot, connect.static(path.dirname(pdfPath), {redirect: false})
+  pdfPath = Npm.resolve pdfFilename
 
 Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
   isDefined = false
@@ -15,6 +11,7 @@ Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
     isDefined = true
 
   test.isTrue isDefined, "PDFJS is not defined"
+  test.isTrue Package['pdf.js'].PDFJS, "Package.pdf.js.PDFJS is not defined"
 
   error = (message, exception) ->
     if exception
@@ -30,7 +27,8 @@ Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
     onComplete()
 
   if Meteor.isServer
-    fs = Npm.require 'fs'
+    test.isTrue fs.readFileSync._blocking
+
     pdf =
       data: fs.readFileSync pdfPath
       password: ''

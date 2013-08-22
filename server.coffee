@@ -2,7 +2,6 @@ PDFJS = {}
 
 btoa = Npm.require 'btoa'
 canvas = Npm.require 'canvas'
-fs = Npm.require 'fs'
 jsdom = Npm.require 'jsdom'
 vm = Npm.require 'vm'
 xmldom = Npm.require 'xmldom'
