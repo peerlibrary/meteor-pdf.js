@@ -70,6 +70,31 @@ Package.on_use(function (api) {
   ], 'client', {bare: true});
 
   api.add_files([
+    'pdf.js/src/network.js',
+    'pdf.js/src/chunked_stream.js',
+    'pdf.js/src/pdf_manager.js',
+    'pdf.js/src/core.js',
+    'pdf.js/src/util.js',
+    'pdf.js/src/canvas.js',
+    'pdf.js/src/obj.js',
+    'pdf.js/src/annotation.js',
+    'pdf.js/src/function.js',
+    'pdf.js/src/charsets.js',
+    'pdf.js/src/cidmaps.js',
+    'pdf.js/src/colorspace.js',
+    'pdf.js/src/crypto.js',
+    'pdf.js/src/evaluator.js',
+    'pdf.js/src/fonts.js',
+    'pdf.js/src/glyphlist.js',
+    'pdf.js/src/image.js',
+    'pdf.js/src/metrics.js',
+    'pdf.js/src/parser.js',
+    'pdf.js/src/pattern.js',
+    'pdf.js/src/stream.js',
+    'pdf.js/src/worker.js',
+    'pdf.js/src/jpx.js',
+    'pdf.js/src/jbig2.js',
+    'pdf.js/src/bidi.js',
     'pdf.js/src/worker_loader.js'
   ], 'client', {isAsset: true});
 });
