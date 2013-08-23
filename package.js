@@ -69,6 +69,7 @@ Package.on_use(function (api) {
     'pdf.js/src/bidi.js'
   ], 'client', {bare: true});
 
+  // All files from worker_loader.js
   api.add_files([
     'pdf.js/src/network.js',
     'pdf.js/src/chunked_stream.js',
@@ -95,6 +96,7 @@ Package.on_use(function (api) {
     'pdf.js/src/jpx.js',
     'pdf.js/src/jbig2.js',
     'pdf.js/src/bidi.js',
+    'pdf.js//external/jpgjs/jpg.js',
     'pdf.js/src/worker_loader.js'
   ], 'client', {isAsset: true});
 });
