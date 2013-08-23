@@ -16,7 +16,7 @@ return when they finish or throw an exception.
     var document = PDFJS.getDocumentSync(pdf);
     var page = document.getPageSync(1);
 
-You should use [fs](https://github.com/peerlibrary/meteor-fs) package for file-system access to get
+You should use [fs](https://github.com/peerlibrary/meteor-fs) package for file system access to get
 fibers-enabled synchronous functions instead of functions which block the whole node.js process.
 
 It requires some additional [node.js](http://nodejs.org/) packages which will be automatically installed
