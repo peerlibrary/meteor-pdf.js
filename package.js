@@ -30,6 +30,7 @@ Package.on_use(function (api) {
   api.export('PDFJS');
 
   api.add_files([
+    'wrap.js',
     'server.coffee'
   ], 'server');
 

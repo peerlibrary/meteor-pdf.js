@@ -61,7 +61,31 @@ context = vm.createContext _.extend {}, global, window, {window: window}
 for file in SRC_FILES
   path = Npm.resolve 'pdf.js/src/' + file
   content = fs.readFileSync path, 'utf8'
+  if file is 'api.js'
+    content +=
+      """
+      PDFJS.PDFDocumentProxy = PDFDocumentProxy;
+      PDFJS.PDFPageProxy = PDFPageProxy;
+      """
   vm.runInContext content, context, path
 
 PDFJS.canvas = canvas
+
+wrap = (obj) ->
+  # We iterate manually and not with underscore because it does not support
+  # getters and setters: https://github.com/jashkenas/underscore/issues/1270
+  for name of obj
+    descriptor = Object.getOwnPropertyDescriptor(obj, name)
+    continue if descriptor.get or descriptor.set # We skip getters and setters
+    continue unless _.isFunction obj[name]
+    obj["#{ name }Sync"] = wrapAsync obj[name]
+
+PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument
+wrap PDFJS.PDFDocumentProxy.prototype
+wrap PDFJS.PDFPageProxy.prototype
+
+PDFJS.LogManager.addLogger
+  warn: (args...) ->
+    Meteor._debug "pdf.js warning:", args... if args
+
 @PDFJS = PDFJS
