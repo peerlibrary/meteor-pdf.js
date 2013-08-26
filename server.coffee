@@ -49,6 +49,11 @@ window.DOMParser = xmldom.DOMParser
 window.PDFJS = PDFJS
 window.Image = canvas.Image
 
+window.setTimeout = Meteor.setTimeout
+window.clearTimeout = Meteor.clearTimeout
+window.setInterval = Meteor.setInterval
+window.clearInterval = Meteor.clearInterval
+
 if DEBUG
   window.console = console
 
@@ -71,6 +76,11 @@ for file in SRC_FILES
 
 PDFJS.canvas = canvas
 
+# TODO: Not good, shared variable among possibly many fibers
+future = null
+passFuture = (fut) ->
+  future = fut
+
 wrap = (obj) ->
   # We iterate manually and not with underscore because it does not support
   # getters and setters: https://github.com/jashkenas/underscore/issues/1270
@@ -78,14 +88,20 @@ wrap = (obj) ->
     descriptor = Object.getOwnPropertyDescriptor(obj, name)
     continue if descriptor.get or descriptor.set # We skip getters and setters
     continue unless _.isFunction obj[name]
-    obj["#{ name }Sync"] = wrapAsync obj[name]
+    obj["#{ name }Sync"] = wrapAsync obj[name], passFuture
 
-PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument
+# Wrap public API into future-enabled API
+PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument, passFuture
 wrap PDFJS.PDFDocumentProxy.prototype
 wrap PDFJS.PDFPageProxy.prototype
 
 PDFJS.LogManager.addLogger
   warn: (args...) ->
-    Meteor._debug "pdf.js warning:", args... if args
+    return if args[0] is 'Setting up fake worker.'
+
+    if future
+      future.throw new Meteor.Error 500, args
+    else
+      throw new Meteor.Error 500, args
 
 @PDFJS = PDFJS

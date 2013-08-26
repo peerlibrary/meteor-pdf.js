@@ -1,6 +1,6 @@
 var Future = Npm.require('fibers/future');
 
-wrapAsync = function (fn) {
+wrapAsync = function (fn, passFuture) {
   return function (/* arguments */) {
     var self = this;
     var callbackSuccess;
@@ -27,6 +27,7 @@ wrapAsync = function (fn) {
     callbackSuccess = Meteor.bindEnvironment(callbackSuccess, logErr);
     callbackFailure = Meteor.bindEnvironment(callbackFailure, logErr);
 
+    if (passFuture) passFuture(fut);
     var promise = fn.apply(self, newArgs);
     if (!promise.then) return promise; // Not a promise
     promise.then(callbackSuccess, callbackFailure);
