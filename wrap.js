@@ -9,7 +9,7 @@ bindEnvironment = function (func, _this) {
       lastFuture.throw(err);
     }
     catch (e) {
-      Meteor._debug("Exception when throwing an exception into the future", e.stack);
+      Meteor._debug("Exception when throwing an exception into the future", err.stack ? err.stack : err, e.stack);
     }
   };
 
