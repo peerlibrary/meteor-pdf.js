@@ -49,10 +49,13 @@ window.DOMParser = xmldom.DOMParser
 window.PDFJS = PDFJS
 window.Image = canvas.Image
 
-window.setTimeout = Meteor.setTimeout
-window.clearTimeout = Meteor.clearTimeout
-window.setInterval = Meteor.setInterval
-window.clearInterval = Meteor.clearInterval
+# TODO: Should implement all logic of Meteor.setTimeout and Meteor.setInterval, just with our bindEnvironment
+window.setTimeout = (f, duration) ->
+  f = bindEnvironment f if _.isFunction f
+  setTimeout f, duration
+window.setInterval = (f, duration) ->
+  f = bindEnvironment f if _.isFunction f
+  setInterval f, duration
 
 if DEBUG
   window.console = console
