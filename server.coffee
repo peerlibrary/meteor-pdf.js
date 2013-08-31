@@ -76,10 +76,11 @@ for file in SRC_FILES
 
 PDFJS.canvas = canvas
 
-# TODO: Not good, shared variable among possibly many fibers
-future = null
-passFuture = (fut) ->
-  future = fut
+originalThen = PDFJS.Promise.prototype.then;
+PDFJS.Promise.prototype.then = (onResolve, onReject) ->
+  onResolve = bindEnvironment onResolve, this if _.isFunction onResolve
+  onReject = bindEnvironment onReject, this if _.isFunction onReject
+  originalThen.call this, onResolve, onReject
 
 wrap = (obj) ->
   # We iterate manually and not with underscore because it does not support
@@ -88,20 +89,19 @@ wrap = (obj) ->
     descriptor = Object.getOwnPropertyDescriptor(obj, name)
     continue if descriptor.get or descriptor.set # We skip getters and setters
     continue unless _.isFunction obj[name]
-    obj["#{ name }Sync"] = wrapAsync obj[name], passFuture
+    obj["#{ name }Sync"] = wrapAsync obj[name]
 
 # Wrap public API into future-enabled API
-PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument, passFuture
+PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument
 wrap PDFJS.PDFDocumentProxy.prototype
 wrap PDFJS.PDFPageProxy.prototype
 
 PDFJS.LogManager.addLogger
   warn: (args...) ->
+    # We ignore this warning
     return if args[0] is 'Setting up fake worker.'
 
-    if future
-      future.throw new Meteor.Error 500, args
-    else
-      throw new Meteor.Error 500, args
+    # But we throw an exception for any other
+    throw new Meteor.Error 500, args
 
 @PDFJS = PDFJS

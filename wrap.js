@@ -1,16 +1,23 @@
 var Future = Npm.require('fibers/future');
 
-wrapAsync = function (fn, passFuture) {
+var currentInvocation = new Meteor.EnvironmentVariable();
+
+bindEnvironment = function (func, _this) {
+  var throwErr = function (err) {
+    var lastFuture = currentInvocation.get().lastFuture;
+    lastFuture.throw(err);
+  };
+
+  return Meteor.bindEnvironment(func, throwErr, _this);
+};
+
+wrapAsync = function (fn) {
   return function (/* arguments */) {
     var self = this;
     var callbackSuccess;
     var callbackFailure;
     var fut;
     var newArgs = _.toArray(arguments);
-
-    var logErr = function (err) {
-      if (err) Meteor._debug("Exception in callback of async function", err ? err.stack : err);
-    };
 
     fut = new Future();
     callbackSuccess = function (val) {
@@ -24,13 +31,15 @@ wrapAsync = function (fn, passFuture) {
         fut.throw(message);
       }
     };
-    callbackSuccess = Meteor.bindEnvironment(callbackSuccess, logErr);
-    callbackFailure = Meteor.bindEnvironment(callbackFailure, logErr);
 
-    if (passFuture) passFuture(fut);
-    var promise = fn.apply(self, newArgs);
-    if (!promise.then) return promise; // Not a promise
-    promise.then(callbackSuccess, callbackFailure);
-    return fut.wait();
+    return currentInvocation.withValue({lastFuture: fut}, function () {
+      callbackSuccess = bindEnvironment(callbackSuccess);
+      callbackFailure = bindEnvironment(callbackFailure);
+
+      var promise = fn.apply(self, newArgs);
+      if (!promise.then) return promise; // Not a promise
+      promise.then(callbackSuccess, callbackFailure);
+      return fut.wait();
+    });
   };
 };
