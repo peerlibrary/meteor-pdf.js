@@ -12,6 +12,8 @@ bindEnvironment = function (func, _this) {
       Meteor._debug("Exception when throwing an exception into the future", e.stack);
     }
   };
+
+  return Meteor.bindEnvironment(func, throwErr, _this);
 };
 
 wrapAsync = function (fn) {
