@@ -98,7 +98,8 @@ Package.on_use(function (api) {
     'pdf.js/src/jbig2.js',
     'pdf.js/src/bidi.js',
     'pdf.js//external/jpgjs/jpg.js',
-    'pdf.js/src/worker_loader.js'
+    'pdf.js/src/worker_loader.js',
+    'pdf.js/web/images/loading-icon.gif'
   ], 'client', {isAsset: true});
 });
 
