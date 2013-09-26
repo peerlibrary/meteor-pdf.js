@@ -16,7 +16,7 @@ Package.describe({
 Npm.depends({
   btoa: "1.1.0",
   canvas: "1.0.3",
-  jsdom: "0.6.5",
+  jsdom: "https://github.com/peerlibrary/jsdom/tarball/2cdb0b665b9ee670d525885e2c47e318baa47851",
   xmldom: "0.1.16",
   // If dependency is updated, smart.json version should be updated, too
   // "node make.js buildnumber" returns the build number to be used
