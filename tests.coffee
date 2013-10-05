@@ -28,6 +28,10 @@ Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
     test.equal page.pageNumber, 1
     test.length page.getAnnotationsSync(), 0
 
+    test.throws ->
+      document.getPageSync 15
+    , /Invalid page index/
+
   processPDF = (document) ->
     test.equal document.numPages, 14
     onComplete()
