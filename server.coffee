@@ -12,35 +12,37 @@ DEBUG = false
 # TODO: Verify if this is the best set of files for the server
 # TODO: Add web/compatibility.js?
 SRC_FILES = [
-  'network.js',
-  'chunked_stream.js',
-  'pdf_manager.js',
-  'core.js',
-  'util.js',
-  'api.js',
-  'metadata.js',
-  'canvas.js',
-  'obj.js',
-  'annotation.js',
-  'function.js',
-  'charsets.js',
-  'cidmaps.js',
-  'colorspace.js',
-  'crypto.js',
-  'evaluator.js',
-  'fonts.js',
-  'font_renderer.js',
-  'glyphlist.js',
-  'image.js',
-  'metrics.js',
-  'parser.js',
-  'pattern.js',
-  'stream.js',
-  'worker.js',
+  'shared/util.js',
+  'shared/colorspace.js',
+  'shared/pattern.js',
+  'shared/function.js',
+  'shared/annotation.js',
+  'display/api.js',
+  'display/metadata.js',
+  'display/canvas.js',
+  'display/font_loader.js'
+  'core/network.js',
+  'core/chunked_stream.js',
+  'core/pdf_manager.js',
+  'core/core.js',
+  'core/obj.js',
+  'core/charsets.js',
+  'core/cidmaps.js',
+  'core/crypto.js',
+  'core/evaluator.js',
+  'core/cmap.js',
+  'core/fonts.js',
+  'core/font_renderer.js',
+  'core/glyphlist.js',
+  'core/image.js',
+  'core/metrics.js',
+  'core/parser.js',
+  'core/stream.js',
+  'core/worker.js',
+  'core/jpx.js',
+  'core/jbig2.js',
+  'core/bidi.js',
   '../external/jpgjs/jpg.js',
-  'jpx.js',
-  'jbig2.js',
-  'bidi.js',
 ]
 
 window = jsdom.jsdom().createWindow()
@@ -69,7 +71,7 @@ context = vm.createContext _.extend {}, global, window, {window: window}
 for file in SRC_FILES
   path = Npm.resolve 'pdf.js/src/' + file
   content = fs.readFileSync path, 'utf8'
-  if file is 'api.js'
+  if file is 'display/api.js'
     content +=
       """
       PDFJS.PDFDocumentProxy = PDFDocumentProxy;
@@ -106,5 +108,10 @@ PDFJS.LogManager.addLogger
 
     # But we throw an exception for any other
     throw new Meteor.Error 500, args
+
+# We already have all the files loaded so we fake the promise as resolved to prevent
+# PDF.js from trying by itself and failing because there is no real browser
+PDFJS.fakeWorkerFilesLoadedPromise = new PDFJS.Promise();
+PDFJS.fakeWorkerFilesLoadedPromise.resolve();
 
 @PDFJS = PDFJS

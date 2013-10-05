@@ -21,7 +21,7 @@ Npm.depends({
   // If dependency is updated, smart.json version should be updated, too
   // "node make.js buildnumber" returns the build number to be used
   // git pdf.js submodule should be kept in sync, too
-  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/7aa3474b494c4f37c511c6bf1f9e398ea4f6011f"
+  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/e6fb92948684d2c57b3ae50900ef3ce9fa988398"
 });
 
 Package.on_use(function (api) {
@@ -34,70 +34,51 @@ Package.on_use(function (api) {
     'server.coffee'
   ], 'server');
 
-  // Based on web/viewer.html and pdf.js/make.js
+  // Based on pdf.js/make.js
   // TODO: Verify if this is the best set of files for the client
   // TODO: Add web/compatibility.js?
   api.add_files([
     'client.js',
-    'pdf.js/src/network.js',
-    'pdf.js/src/chunked_stream.js',
-    'pdf.js/src/pdf_manager.js',
-    'pdf.js/src/core.js',
-    'pdf.js/src/util.js',
-    'pdf.js/src/api.js',
-    'pdf.js/src/metadata.js',
-    'pdf.js/src/canvas.js',
-    'pdf.js/src/obj.js',
-    'pdf.js/src/annotation.js',
-    'pdf.js/src/function.js',
-    'pdf.js/src/charsets.js',
-    'pdf.js/src/cidmaps.js',
-    'pdf.js/src/colorspace.js',
-    'pdf.js/src/crypto.js',
-    'pdf.js/src/evaluator.js',
-    'pdf.js/src/fonts.js',
-    'pdf.js/src/font_renderer.js',
-    'pdf.js/src/glyphlist.js',
-    'pdf.js/src/image.js',
-    'pdf.js/src/metrics.js',
-    'pdf.js/src/parser.js',
-    'pdf.js/src/pattern.js',
-    'pdf.js/src/stream.js',
-    'pdf.js/src/worker.js',
-    'pdf.js/src/../external/jpgjs/jpg.js',
-    'pdf.js/src/jpx.js',
-    'pdf.js/src/jbig2.js',
-    'pdf.js/src/bidi.js'
+    'pdf.js/src/shared/util.js',
+    'pdf.js/src/shared/colorspace.js',
+    'pdf.js/src/shared/pattern.js',
+    'pdf.js/src/shared/function.js',
+    'pdf.js/src/shared/annotation.js',
+    'pdf.js/src/display/api.js',
+    'pdf.js/src/display/metadata.js',
+    'pdf.js/src/display/canvas.js',
+    'pdf.js/src/display/font_loader.js'
   ], 'client', {bare: true});
 
-  // All files from worker_loader.js
+  // Based on pdf.js/make.js
   api.add_files([
-    'pdf.js/src/network.js',
-    'pdf.js/src/chunked_stream.js',
-    'pdf.js/src/pdf_manager.js',
-    'pdf.js/src/core.js',
-    'pdf.js/src/util.js',
-    'pdf.js/src/canvas.js',
-    'pdf.js/src/obj.js',
-    'pdf.js/src/annotation.js',
-    'pdf.js/src/function.js',
-    'pdf.js/src/charsets.js',
-    'pdf.js/src/cidmaps.js',
-    'pdf.js/src/colorspace.js',
-    'pdf.js/src/crypto.js',
-    'pdf.js/src/evaluator.js',
-    'pdf.js/src/fonts.js',
-    'pdf.js/src/glyphlist.js',
-    'pdf.js/src/image.js',
-    'pdf.js/src/metrics.js',
-    'pdf.js/src/parser.js',
-    'pdf.js/src/pattern.js',
-    'pdf.js/src/stream.js',
-    'pdf.js/src/worker.js',
-    'pdf.js/src/jpx.js',
-    'pdf.js/src/jbig2.js',
-    'pdf.js/src/bidi.js',
-    'pdf.js//external/jpgjs/jpg.js',
+    'pdf.js/src/shared/util.js',
+    'pdf.js/src/shared/colorspace.js',
+    'pdf.js/src/shared/pattern.js',
+    'pdf.js/src/shared/function.js',
+    'pdf.js/src/shared/annotation.js',
+    'pdf.js/src/core/network.js',
+    'pdf.js/src/core/chunked_stream.js',
+    'pdf.js/src/core/pdf_manager.js',
+    'pdf.js/src/core/core.js',
+    'pdf.js/src/core/obj.js',
+    'pdf.js/src/core/charsets.js',
+    'pdf.js/src/core/cidmaps.js',
+    'pdf.js/src/core/crypto.js',
+    'pdf.js/src/core/evaluator.js',
+    'pdf.js/src/core/cmap.js',
+    'pdf.js/src/core/fonts.js',
+    'pdf.js/src/core/font_renderer.js',
+    'pdf.js/src/core/glyphlist.js',
+    'pdf.js/src/core/image.js',
+    'pdf.js/src/core/metrics.js',
+    'pdf.js/src/core/parser.js',
+    'pdf.js/src/core/stream.js',
+    'pdf.js/src/core/worker.js',
+    'pdf.js/src/core/jpx.js',
+    'pdf.js/src/core/jbig2.js',
+    'pdf.js/src/core/bidi.js',
+    'pdf.js/external/jpgjs/jpg.js',
     'pdf.js/src/worker_loader.js',
     'pdf.js/web/images/loading-icon.gif'
   ], 'client', {isAsset: true});
