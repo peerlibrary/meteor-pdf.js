@@ -14,8 +14,8 @@ Package.describe({
 })();
 
 Npm.depends({
-  btoa: "1.1.0",
-  canvas: "1.0.3",
+  btoa: "1.1.1",
+  canvas: "1.1.0",
   jsdom: "0.8.6",
   xmldom: "0.1.16",
   // If dependency is updated, smart.json version should be updated, too
