@@ -24,11 +24,16 @@ from [npm](http://nodejs.org/) when your Meteor application is run for fhe first
 [Cairo](http://cairographics.org/) graphic library is required for this and you
 might have to configure environment properly so that it can be successfully compiled.
 
-On Mac OS X you can get Cairo by installing [X11](http://xquartz.macosforge.org/), `pkg-config`
-([Homebrew](http://brew.sh/), [MacPorts](https://www.macports.org/)), and:
+On Mac OS X you can get Cairo by installing [X11](http://xquartz.macosforge.org/) and
+run the following before you run `mrt` to configure environment:
 
     export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig
 
+To be able to compile libraries, you need [Xcode](https://developer.apple.com/xcode/)
+with command line tools installed (from _Preferences_ > _Downloads_ > _Components_),
+and `pkg-config` as well. The latter you can install using [Homebrew](http://brew.sh/)
+([MacPorts](https://www.macports.org/) also works, if you prefer it).
+
 On Debian you can install:
 
-    aptitude install libcairo2-dev libfreetype6-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+    sudo aptitude install libcairo2-dev libfreetype6-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
