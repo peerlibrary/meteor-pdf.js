@@ -6,9 +6,6 @@ Package.describe({
 (function () {
   var path = Npm.require('path');
 
-  // We set PATH so that Meteor's node.js binary is used when compiling dependencies and not system's
-  process.env.PATH = path.dirname(process.argv[0]) + ':' + process.env.PATH;
-
   // PKG_CONFIG_PATH for Mac OS X
   process.env.PKG_CONFIG_PATH = (process.env.PKG_CONFIG_PATH ? process.env.PKG_CONFIG_PATH + ':' : '') + '/opt/X11/lib/pkgconfig';
 })();
