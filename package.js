@@ -18,7 +18,7 @@ Npm.depends({
   // If dependency is updated, smart.json version should be updated, too
   // "node make.js buildnumber" returns the build number to be used
   // git pdf.js submodule should be kept in sync, too
-  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/e6fb92948684d2c57b3ae50900ef3ce9fa988398"
+  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/0d5ee2a8ded6a6eb4f12b29ee9786fdb7d170897"
 });
 
 Package.on_use(function (api) {
@@ -63,7 +63,6 @@ Package.on_use(function (api) {
     'pdf.js/src/core/cidmaps.js',
     'pdf.js/src/core/crypto.js',
     'pdf.js/src/core/evaluator.js',
-    'pdf.js/src/core/cmap.js',
     'pdf.js/src/core/fonts.js',
     'pdf.js/src/core/font_renderer.js',
     'pdf.js/src/core/glyphlist.js',
@@ -75,6 +74,7 @@ Package.on_use(function (api) {
     'pdf.js/src/core/jpx.js',
     'pdf.js/src/core/jbig2.js',
     'pdf.js/src/core/bidi.js',
+    'pdf.js/src/core/cmap.js',
     'pdf.js/external/jpgjs/jpg.js',
     'pdf.js/src/worker_loader.js',
     'pdf.js/web/images/loading-icon.gif'
