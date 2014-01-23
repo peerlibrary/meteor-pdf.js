@@ -3,7 +3,7 @@
   "description": "Meteor smart package for pdf.js",
   "homepage": "https://github.com/peerlibrary/meteor-pdf.js",
   "author": "The PeerLibrary Project",
-  "version": "0.8.934.1",
+  "version": "0.8.933.1",
   "git": "https://github.com/peerlibrary/meteor-pdf.js.git",
   "meteor": {
     "branch": "peerlibrary",
