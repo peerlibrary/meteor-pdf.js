@@ -6,7 +6,7 @@ jsdom = Npm.require 'jsdom'
 vm = Npm.require 'vm'
 xmldom = Npm.require 'xmldom'
 
-DEBUG = true
+DEBUG = false
 
 # Based on web/viewer.html and pdf.js/make.js
 # TODO: Verify if this is the best set of files for the server
