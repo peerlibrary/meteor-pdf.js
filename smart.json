@@ -10,7 +10,6 @@
     "git": "https://github.com/peerlibrary/meteor.git"
   },
   "packages": {
-    "connect": {},
     "fs": {}
   }
 }
