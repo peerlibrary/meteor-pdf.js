@@ -1,5 +1,5 @@
 {
-  "name": "pdf.js - Mozilla's PDF reader",
+  "name": "pdf.js",
   "description": "Mozilla's HTML5&JavaScript PDF reader, repackaged for Meteor",
   "homepage": "https://github.com/peerlibrary/meteor-pdf.js",
   "author": "The PeerLibrary Project",
