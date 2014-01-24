@@ -115,6 +115,8 @@ wrap = (obj) ->
   # We iterate manually and not with underscore because it does not support
   # getters and setters: https://github.com/jashkenas/underscore/issues/1270
   for name of obj
+    continue if /^_/.test name # We skip private members
+    continue if name is 'render' # PDFPageProxy.render is a special case not returning promise directly
     descriptor = Object.getOwnPropertyDescriptor(obj, name)
     continue if descriptor.get or descriptor.set # We skip getters and setters
     continue unless _.isFunction obj[name]
@@ -124,6 +126,10 @@ wrap = (obj) ->
 PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument
 wrap context.PDFDocumentProxy.prototype
 wrap context.PDFPageProxy.prototype
+
+# PDFPageProxy.render is a special case not returning promise directly
+context.PDFPageProxy.prototype.renderSync = wrapAsync (args...) ->
+  context.PDFPageProxy.prototype.render.apply(this, args).promise
 
 PDFJS.UnsupportedManager.listen (msg) ->
   # We throw an exception for anything unsupported
