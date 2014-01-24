@@ -1,7 +1,8 @@
 pdf.js smart package
 ====================
 
-Meteor smart package for [pdf.js](https://github.com/mozilla/pdf.js), a PDF Reader in JavaScript.
+Meteor smart package for [pdf.js](https://github.com/mozilla/pdf.js), Mozilla's PDF
+reader built with HTML5 and JavaScript that powers the PDF display in Firefox.
 
 Adding this package to your [Meteor](http://www.meteor.com/) application adds `PDFJS` object into the global scope,
 which you can use as defined in [pdf.js API](https://github.com/mozilla/pdf.js/blob/master/src/api.js).
