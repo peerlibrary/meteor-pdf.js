@@ -14,7 +14,8 @@ Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
   test.isTrue Package['pdf.js'].PDFJS, "Package.pdf.js.PDFJS is not defined"
 
   if Meteor.isClient
-    pdf = "#{ testRoot }/#{ pdfFilename }"
+    # Random query parameter to prevent caching
+    pdf = "#{ testRoot }/#{ pdfFilename }?#{ Random.id() }"
   else
     test.isTrue fs.readFileSync._blocking
 
