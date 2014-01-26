@@ -1,5 +1,5 @@
 Package.describe({
-  summary: "Meteor smart package for pdf.js"
+  summary: "Mozilla's HTML5&JavaScript PDF reader, repackaged for Meteor"
 });
 
 // Initialization of environment
