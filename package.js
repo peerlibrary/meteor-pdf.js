@@ -33,7 +33,6 @@ Package.on_use(function (api) {
 
   // Based on pdf.js/make.js
   // TODO: Verify if this is the best set of files for the client
-  // TODO: Add web/compatibility.js?
   api.add_files([
     'client.js',
     'pdf.js/src/shared/util.js',
@@ -45,6 +44,7 @@ Package.on_use(function (api) {
     'pdf.js/src/display/metadata.js',
     'pdf.js/src/display/canvas.js',
     'pdf.js/src/display/font_loader.js'
+    'pdf.js/web/compatibility.js'
   ], 'client', {bare: true});
 
   // Based on pdf.js/make.js
