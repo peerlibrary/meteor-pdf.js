@@ -12,13 +12,13 @@ Package.describe({
 
 Npm.depends({
   btoa: "1.1.1",
-  canvas: "1.0.4",
-  jsdom: "0.8.6",
-  xmldom: "0.1.16",
+  canvas: "1.1.3",
+  jsdom: "0.10.1",
+  xmldom: "0.1.19",
   // If dependency is updated, smart.json version should be updated, too
   // "node make.js buildnumber" returns the build number to be used
   // git pdf.js submodule should be kept in sync, too
-  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/520fdf2f6a0fdb90b4c60ff6dfe2ae3d9c7685e3"
+  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/ed038169f34cea5c20d433eb5c03790dc5bf9876"
 });
 
 Package.on_use(function (api) {

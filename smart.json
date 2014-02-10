@@ -3,7 +3,7 @@
   "description": "Mozilla's HTML5&JavaScript PDF reader, repackaged for Meteor",
   "homepage": "https://github.com/peerlibrary/meteor-pdf.js",
   "author": "The PeerLibrary Project",
-  "version": "0.8.942-3",
+  "version": "0.8.943-1",
   "git": "https://github.com/peerlibrary/meteor-pdf.js.git",
   "meteor": {
     "branch": "peerlibrary",
