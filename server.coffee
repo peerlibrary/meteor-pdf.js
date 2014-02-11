@@ -135,6 +135,8 @@ PDFJS.UnsupportedManager.listen (msg) ->
   # We throw an exception for anything unsupported
   throw new Meteor.Error 500, "Unsupported feature", msg
 
+PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.infos if DEBUG
+
 # We already have all the files loaded so we fake the promise as resolved to prevent
 # PDF.js from trying by itself and failing because there is no real browser
 PDFJS.fakeWorkerFilesLoadedPromise = new PDFJS.LegacyPromise()
