@@ -8,43 +8,43 @@ xmldom = Npm.require 'xmldom'
 
 DEBUG = false
 
-# Based on web/viewer.html and pdf.js/make.js
-# TODO: Verify if this is the best set of files for the server
+# SHARED + DISPLAY + CORE
+# TODO: Reuse variables from package.js
 # TODO: Add web/compatibility.js?
 SRC_FILES = [
-  'shared/util.js',
-  'shared/colorspace.js',
-  'shared/function.js',
-  'shared/annotation.js',
-  'display/api.js',
-  'display/metadata.js',
-  'display/canvas.js',
-  'display/pattern_helper.js',
-  'display/font_loader.js'
-  'core/network.js',
-  'core/chunked_stream.js',
-  'core/pdf_manager.js',
-  'core/core.js',
-  'core/obj.js',
-  'core/charsets.js',
-  'core/cidmaps.js',
-  'core/crypto.js',
-  'core/pattern.js',
-  'core/evaluator.js',
-  'core/fonts.js',
-  'core/font_renderer.js',
-  'core/glyphlist.js',
-  'core/image.js',
-  'core/metrics.js',
-  'core/parser.js',
-  'core/ps_parser.js',
-  'core/stream.js',
-  'core/worker.js',
-  'core/jpx.js',
-  'core/jbig2.js',
-  'core/bidi.js',
-  'core/cmap.js',
-  '../external/jpgjs/jpg.js',
+  'pdf.js/src/shared/util.js',
+  'pdf.js/src/shared/colorspace.js',
+  'pdf.js/src/shared/function.js',
+  'pdf.js/src/shared/annotation.js'
+  'pdf.js/src/display/api.js',
+  'pdf.js/src/display/metadata.js',
+  'pdf.js/src/display/canvas.js',
+  'pdf.js/src/display/pattern_helper.js',
+  'pdf.js/src/display/font_loader.js'
+  'pdf.js/src/core/network.js',
+  'pdf.js/src/core/chunked_stream.js',
+  'pdf.js/src/core/pdf_manager.js',
+  'pdf.js/src/core/core.js',
+  'pdf.js/src/core/obj.js',
+  'pdf.js/src/core/charsets.js',
+  'pdf.js/src/core/cidmaps.js',
+  'pdf.js/src/core/crypto.js',
+  'pdf.js/src/core/pattern.js',
+  'pdf.js/src/core/evaluator.js',
+  'pdf.js/src/core/fonts.js',
+  'pdf.js/src/core/font_renderer.js',
+  'pdf.js/src/core/glyphlist.js',
+  'pdf.js/src/core/image.js',
+  'pdf.js/src/core/metrics.js',
+  'pdf.js/src/core/parser.js',
+  'pdf.js/src/core/ps_parser.js',
+  'pdf.js/src/core/stream.js',
+  'pdf.js/src/core/worker.js',
+  'pdf.js/src/core/jpx.js',
+  'pdf.js/src/core/jbig2.js',
+  'pdf.js/src/core/bidi.js',
+  'pdf.js/src/core/cmap.js',
+  'pdf.js/external/jpgjs/jpg.js',
 ]
 
 window = jsdom.jsdom().createWindow()
@@ -94,12 +94,9 @@ window = _.extend {}, global, window
 window.window = window
 context = vm.createContext window
 
-ASSETS_PATH = "#{ process.cwd() }/../client/packages/pdf.js/pdf.js/src/"
-
 for file in SRC_FILES
-  path = ASSETS_PATH + file
-  content = fs.readFileSync path, 'utf8'
-  vm.runInContext content, context, path
+  content = Assets.getText file
+  vm.runInContext content, context, file
 
 PDFJS.canvas = canvas
 

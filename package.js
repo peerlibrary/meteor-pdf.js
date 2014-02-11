@@ -17,8 +17,52 @@ Npm.depends({
   xmldom: "0.1.19"
 });
 
+// The following lists are based on pdf.js/make.js
+
+SHARED = [
+  'pdf.js/src/shared/util.js',
+  'pdf.js/src/shared/colorspace.js',
+  'pdf.js/src/shared/function.js',
+  'pdf.js/src/shared/annotation.js'
+];
+
+var DISPLAY = [
+  'pdf.js/src/display/api.js',
+  'pdf.js/src/display/metadata.js',
+  'pdf.js/src/display/canvas.js',
+  'pdf.js/src/display/pattern_helper.js',
+  'pdf.js/src/display/font_loader.js'
+];
+
+var CORE = [
+  'pdf.js/src/core/network.js',
+  'pdf.js/src/core/chunked_stream.js',
+  'pdf.js/src/core/pdf_manager.js',
+  'pdf.js/src/core/core.js',
+  'pdf.js/src/core/obj.js',
+  'pdf.js/src/core/charsets.js',
+  'pdf.js/src/core/cidmaps.js',
+  'pdf.js/src/core/crypto.js',
+  'pdf.js/src/core/pattern.js',
+  'pdf.js/src/core/evaluator.js',
+  'pdf.js/src/core/fonts.js',
+  'pdf.js/src/core/font_renderer.js',
+  'pdf.js/src/core/glyphlist.js',
+  'pdf.js/src/core/image.js',
+  'pdf.js/src/core/metrics.js',
+  'pdf.js/src/core/parser.js',
+  'pdf.js/src/core/ps_parser.js',
+  'pdf.js/src/core/stream.js',
+  'pdf.js/src/core/worker.js',
+  'pdf.js/src/core/jpx.js',
+  'pdf.js/src/core/jbig2.js',
+  'pdf.js/src/core/bidi.js',
+  'pdf.js/src/core/cmap.js',
+  'pdf.js/external/jpgjs/jpg.js'
+];
+
 Package.on_use(function (api) {
-  api.use(['coffeescript', 'underscore', 'fs'], 'server');
+  api.use(['coffeescript', 'underscore'], 'server');
 
   api.export('PDFJS');
 
@@ -27,66 +71,29 @@ Package.on_use(function (api) {
     'server.coffee'
   ], 'server');
 
-  // Based on pdf.js/make.js
-  // TODO: Verify if this is the best set of files for the client
-  // TODO: Add web/compatibility.js?
+  // Client files
   api.add_files([
     'client.js',
-    'pdf.js/src/shared/util.js',
-    'pdf.js/src/shared/colorspace.js',
-    'pdf.js/src/shared/function.js',
-    'pdf.js/src/shared/annotation.js',
-    'pdf.js/src/display/api.js',
-    'pdf.js/src/display/metadata.js',
-    'pdf.js/src/display/canvas.js',
-    'pdf.js/src/display/pattern_helper.js',
-    'pdf.js/src/display/font_loader.js'
+    'pdf.js/web/compatibility.js'
   ], 'client', {bare: true});
+  api.add_files(SHARED, 'client', {bare: true});
+  api.add_files(DISPLAY, 'client', {bare: true});
 
-  // Based on pdf.js/make.js
-  // We make all files assets (even those in "display" directory, which are not
-  // needed for the web worker) because they are used on the server side as well
+  // Worker files have to be available directly
+  // We need them on the server side as well
+  api.add_files(SHARED, ['client', 'server'], {isAsset: true});
+  api.add_files(CORE, ['client', 'server'], {isAsset: true});
   api.add_files([
-    'pdf.js/src/shared/util.js',
-    'pdf.js/src/shared/colorspace.js',
-    'pdf.js/src/shared/function.js',
-    'pdf.js/src/shared/annotation.js',
-    'pdf.js/src/display/api.js',
-    'pdf.js/src/display/metadata.js',
-    'pdf.js/src/display/canvas.js',
-    'pdf.js/src/display/pattern_helper.js',
-    'pdf.js/src/display/font_loader.js',
-    'pdf.js/src/core/network.js',
-    'pdf.js/src/core/chunked_stream.js',
-    'pdf.js/src/core/pdf_manager.js',
-    'pdf.js/src/core/core.js',
-    'pdf.js/src/core/obj.js',
-    'pdf.js/src/core/charsets.js',
-    'pdf.js/src/core/cidmaps.js',
-    'pdf.js/src/core/crypto.js',
-    'pdf.js/src/core/pattern.js',
-    'pdf.js/src/core/evaluator.js',
-    'pdf.js/src/core/fonts.js',
-    'pdf.js/src/core/font_renderer.js',
-    'pdf.js/src/core/glyphlist.js',
-    'pdf.js/src/core/image.js',
-    'pdf.js/src/core/metrics.js',
-    'pdf.js/src/core/parser.js',
-    'pdf.js/src/core/ps_parser.js',
-    'pdf.js/src/core/stream.js',
-    'pdf.js/src/core/worker.js',
-    'pdf.js/src/core/jpx.js',
-    'pdf.js/src/core/jbig2.js',
-    'pdf.js/src/core/bidi.js',
-    'pdf.js/src/core/cmap.js',
-    'pdf.js/external/jpgjs/jpg.js',
     'pdf.js/src/worker_loader.js',
     'pdf.js/web/images/loading-icon.gif'
   ], 'client', {isAsset: true});
+
+  // The rest of files for the server side
+  api.add_files(DISPLAY, 'server', {isAsset: true});
 });
 
 Package.on_test(function (api) {
-  api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'fs', 'random'], ['client', 'server']);
+  api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'random'], ['client', 'server']);
   api.add_files('tests.coffee', ['client', 'server']);
 
   api.add_files([
@@ -95,5 +102,5 @@ Package.on_test(function (api) {
 
   api.add_files([
     'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
-  ], 'client', {isAsset: true});
+  ], ['client', 'server'], {isAsset: true});
 });
