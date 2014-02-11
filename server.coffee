@@ -14,12 +14,12 @@ DEBUG = false
 SRC_FILES = [
   'shared/util.js',
   'shared/colorspace.js',
-  'shared/pattern.js',
   'shared/function.js',
   'shared/annotation.js',
   'display/api.js',
   'display/metadata.js',
   'display/canvas.js',
+  'display/pattern_helper.js',
   'display/font_loader.js'
   'core/network.js',
   'core/chunked_stream.js',
@@ -29,6 +29,7 @@ SRC_FILES = [
   'core/charsets.js',
   'core/cidmaps.js',
   'core/crypto.js',
+  'core/pattern.js',
   'core/evaluator.js',
   'core/fonts.js',
   'core/font_renderer.js',
@@ -36,6 +37,7 @@ SRC_FILES = [
   'core/image.js',
   'core/metrics.js',
   'core/parser.js',
+  'core/ps_parser.js',
   'core/stream.js',
   'core/worker.js',
   'core/jpx.js',
@@ -92,8 +94,10 @@ window = _.extend {}, global, window
 window.window = window
 context = vm.createContext window
 
+ASSETS_PATH = "#{ process.cwd() }/../client/packages/pdf.js/pdf.js/src/"
+
 for file in SRC_FILES
-  path = Npm.resolve 'pdf.js/src/' + file
+  path = ASSETS_PATH + file
   content = fs.readFileSync path, 'utf8'
   vm.runInContext content, context, path
 

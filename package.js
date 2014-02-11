@@ -12,13 +12,9 @@ Package.describe({
 
 Npm.depends({
   btoa: "1.1.1",
-  canvas: "1.1.3",
+  canvas: "https://github.com/peerlibrary/node-canvas/tarball/76bbe247fadb370ed295641c34e063fdcf95e215",
   jsdom: "0.10.1",
-  xmldom: "0.1.19",
-  // If dependency is updated, smart.json version should be updated, too
-  // "node make.js buildnumber" returns the build number to be used
-  // git pdf.js submodule should be kept in sync, too
-  'pdf.js': "https://github.com/peerlibrary/pdf.js/tarball/ed038169f34cea5c20d433eb5c03790dc5bf9876"
+  xmldom: "0.1.19"
 });
 
 Package.on_use(function (api) {
@@ -38,22 +34,28 @@ Package.on_use(function (api) {
     'client.js',
     'pdf.js/src/shared/util.js',
     'pdf.js/src/shared/colorspace.js',
-    'pdf.js/src/shared/pattern.js',
     'pdf.js/src/shared/function.js',
     'pdf.js/src/shared/annotation.js',
     'pdf.js/src/display/api.js',
     'pdf.js/src/display/metadata.js',
     'pdf.js/src/display/canvas.js',
+    'pdf.js/src/display/pattern_helper.js',
     'pdf.js/src/display/font_loader.js'
   ], 'client', {bare: true});
 
   // Based on pdf.js/make.js
+  // We make all files assets (even those in "display" directory, which are not
+  // needed for the web worker) because they are used on the server side as well
   api.add_files([
     'pdf.js/src/shared/util.js',
     'pdf.js/src/shared/colorspace.js',
-    'pdf.js/src/shared/pattern.js',
     'pdf.js/src/shared/function.js',
     'pdf.js/src/shared/annotation.js',
+    'pdf.js/src/display/api.js',
+    'pdf.js/src/display/metadata.js',
+    'pdf.js/src/display/canvas.js',
+    'pdf.js/src/display/pattern_helper.js',
+    'pdf.js/src/display/font_loader.js',
     'pdf.js/src/core/network.js',
     'pdf.js/src/core/chunked_stream.js',
     'pdf.js/src/core/pdf_manager.js',
@@ -62,6 +64,7 @@ Package.on_use(function (api) {
     'pdf.js/src/core/charsets.js',
     'pdf.js/src/core/cidmaps.js',
     'pdf.js/src/core/crypto.js',
+    'pdf.js/src/core/pattern.js',
     'pdf.js/src/core/evaluator.js',
     'pdf.js/src/core/fonts.js',
     'pdf.js/src/core/font_renderer.js',
@@ -69,6 +72,7 @@ Package.on_use(function (api) {
     'pdf.js/src/core/image.js',
     'pdf.js/src/core/metrics.js',
     'pdf.js/src/core/parser.js',
+    'pdf.js/src/core/ps_parser.js',
     'pdf.js/src/core/stream.js',
     'pdf.js/src/core/worker.js',
     'pdf.js/src/core/jpx.js',
