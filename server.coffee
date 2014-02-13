@@ -1,12 +1,15 @@
 PDFJS = {}
 
 btoa = Npm.require 'btoa'
+atob = Npm.require 'atob'
 canvas = Npm.require 'canvas'
 jsdom = Npm.require 'jsdom'
 vm = Npm.require 'vm'
 xmldom = Npm.require 'xmldom'
 
 DEBUG = false
+
+PDFJS.pdfBug = DEBUG
 
 # SHARED + DISPLAY + CORE
 # TODO: Reuse variables from package.js
@@ -47,57 +50,69 @@ SRC_FILES = [
   'pdf.js/external/jpgjs/jpg.js',
 ]
 
-window = jsdom.jsdom().createWindow()
-window.btoa = btoa
-window.DOMParser = xmldom.DOMParser
-window.PDFJS = PDFJS
-window.Image = canvas.Image
+# TODO: Disable fetching external resources once fixed in jsdom https://github.com/tmpvar/jsdom/issues/743
+#jsdom.defaultDocumentFeatures =
+#  FetchExternalResources: false
+#  ProcessExternalResources: false
 
-window.setTimeout = wrappedSetTimeout
-window.setInterval = wrappedSetInterval
-window.clearTimeout = wrappedClearTimeout
-window.clearInterval = wrappedClearInterval
+@runInServerBrowser = (context, files, initialDom) ->
+  window = jsdom.jsdom(initialDom).createWindow()
+  window.btoa = btoa
+  window.atob = atob
+  window.DOMParser = xmldom.DOMParser
+  window.Image = canvas.Image
 
-# TODO: We should provide some way to capture logs which were created during each PDF.js API call
+  window.setTimeout = wrappedSetTimeout
+  window.setInterval = wrappedSetInterval
+  window.clearTimeout = wrappedClearTimeout
+  window.clearInterval = wrappedClearInterval
 
-window.console =
-  log: (args...) ->
-    console.log args... if DEBUG
+  # TODO: We should provide some way to capture logs which were created during each PDF.js API call
 
-    # We ignore this warning
-    return if args[0] is 'Warning: Setting up fake worker.'
+  window.console =
+    log: (args...) ->
+      console.log args... if DEBUG
 
-    # But we throw an exception for any other warning or error
-    throw new Meteor.Error 500, args if /^(Warning|Error): /.test args[0]
+      # We ignore this warning
+      return if args[0] is 'Warning: Setting up fake worker.'
 
-  error: (args...) ->
-    console.error args... if DEBUG
+      # But we throw an exception for any other warning or error
+      throw new Meteor.Error 500, args if /^(Warning|Error): /.test args[0]
 
-    # PDF.js throws an error already for error calls
+    error: (args...) ->
+      console.error args... if DEBUG
 
-  warn: (args...) ->
-    console.warn args... if DEBUG
+      # PDF.js throws an error already for error calls
 
-    # We throw an exception for any warning (PDF.js does not seem to really use them)
-    throw new Meteor.Error 500, args
+    warn: (args...) ->
+      console.warn args... if DEBUG
 
-PDFJS.pdfBug = DEBUG
+      # We throw an exception for any warning (PDF.js does not seem to really use them)
+      throw new Meteor.Error 500, args
 
-# So that isSyncFontLoadingSupported returns true
-window.navigator.userAgent = 'Mozilla/5.0 rv:14 Gecko'
+  # So that isSyncFontLoadingSupported returns true
+  window.navigator.userAgent = 'Mozilla/5.0 rv:14 Gecko'
 
-# We have to make context so that window is both global scope and window variable. This
-# is necessary because node.js does not make window variable a global scope by default,
-# but PDF.js does assume that if window is available, that is global scope.
-# TODO: To be secure, we do not have to pass everything in the context, like "require" and "process" and "global" itself?
-window = _.extend {}, global, window
-window.window = window
-context = vm.createContext window
+  # We have to make context so that window is both global scope and window variable. This
+  # is necessary because node.js does not make window variable a global scope by default,
+  # but PDF.js does assume that if window is available, that is global scope.
+  # TODO: To be secure, we do not have to pass everything in the context, like "require" and "process" and "global" itself?
+  window = _.extend context, global, window
+  window.window = window
+  window.self = window # encoding-indexes.js uses self for global context
+  vmContext = vm.createContext window
 
-for file in SRC_FILES
-  content = Assets.getText file
-  vm.runInContext content, context, file
+  for filename in ['stringencoding/encoding-indexes.js', 'stringencoding/encoding.js']
+    vm.runInContext Assets.getText(filename), vmContext, filename
 
+  for {content, filename} in files
+    vm.runInContext content, vmContext, filename
+
+  vmContext
+
+vmContext = runInServerBrowser {PDFJS: PDFJS}, (content: Assets.getText(filename), filename: filename for filename in SRC_FILES)
+
+# We store it into PDFJS so that users of our library do not have to depend on it and Npm.require it
 PDFJS.canvas = canvas
 
 originalLegacyThen = PDFJS.LegacyPromise.prototype.then
@@ -106,8 +121,8 @@ PDFJS.LegacyPromise.prototype.then = (onResolve, onReject) ->
   onReject = bindEnvironment onReject, this if _.isFunction onReject
   originalLegacyThen.call this, onResolve, onReject
 
-originalThen = context.Promise.prototype.then
-context.Promise.prototype.then = (onResolve, onReject) ->
+originalThen = vmContext.Promise.prototype.then
+vmContext.Promise.prototype.then = (onResolve, onReject) ->
   onResolve = bindEnvironment onResolve, this if _.isFunction onResolve
   onReject = bindEnvironment onReject, this if _.isFunction onReject
   originalThen.call this, onResolve, onReject
@@ -125,12 +140,12 @@ wrap = (obj) ->
 
 # Wrap public API into future-enabled API
 PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument
-wrap context.PDFDocumentProxy.prototype
-wrap context.PDFPageProxy.prototype
+wrap vmContext.PDFDocumentProxy.prototype
+wrap vmContext.PDFPageProxy.prototype
 
 # PDFPageProxy.render is a special case not returning promise directly
-context.PDFPageProxy.prototype.renderSync = wrapAsync (args...) ->
-  context.PDFPageProxy.prototype.render.apply(this, args).promise
+vmContext.PDFPageProxy.prototype.renderSync = wrapAsync (args...) ->
+  vmContext.PDFPageProxy.prototype.render.apply(this, args).promise
 
 PDFJS.UnsupportedManager.listen (msg) ->
   # We throw an exception for anything unsupported

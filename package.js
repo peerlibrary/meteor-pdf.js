@@ -12,6 +12,7 @@ Package.describe({
 
 Npm.depends({
   btoa: "1.1.1",
+  atob: "1.1.0",
   canvas: "https://github.com/peerlibrary/node-canvas/tarball/76bbe247fadb370ed295641c34e063fdcf95e215",
   jsdom: "0.10.1",
   xmldom: "0.1.19"
@@ -90,10 +91,26 @@ Package.on_use(function (api) {
 
   // The rest of files for the server side
   api.add_files(DISPLAY, 'server', {isAsset: true});
+
+  // Polyfill for TextDecoder for the server side
+  api.add_files([
+    'stringencoding/encoding-indexes.js',
+    'stringencoding/encoding.js'
+  ], 'server', {isAsset: true});
 });
 
 Package.on_test(function (api) {
   api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'random'], ['client', 'server']);
+
+  api.add_files([
+    'pdf.js/test/features/tests.js',
+    'pdf.js/test/features/index.html'
+  ], 'server', {isAsset: true});
+
+  api.add_files([
+    'tests_features.coffee'
+  ], 'server');
+
   api.add_files('tests.coffee', ['client', 'server']);
 
   api.add_files([

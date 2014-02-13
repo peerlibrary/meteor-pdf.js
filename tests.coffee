@@ -1,7 +1,7 @@
 testRoot = '/packages/pdf.js'
 pdfFilename = 'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
 
-Tinytest.addAsync 'meteor-pdf.js', (test, onComplete) ->
+Tinytest.addAsync 'meteor-pdf.js - general', (test, onComplete) ->
   isDefined = false
   try
     PDFJS
