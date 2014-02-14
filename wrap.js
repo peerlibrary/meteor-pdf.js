@@ -5,7 +5,13 @@ var currentInvocation = new Meteor.EnvironmentVariable();
 bindEnvironment = function (func, _this) {
   var throwErr = function (err) {
     try {
-      currentInvocation.get().lastFuture.throw(err);
+      var lastFuture = currentInvocation.get() && currentInvocation.get().lastFuture;
+      if (lastFuture) {
+        lastFuture.throw(err);
+      }
+      else {
+        Meteor._debug("Exception thrown outside wrapAsync:", err.stack ? err.stack : err);
+      }
     }
     catch (e) {
       Meteor._debug("Exception when throwing an exception into the future:", e.stack, "\nOriginal exception:", err.stack ? err.stack : err);
