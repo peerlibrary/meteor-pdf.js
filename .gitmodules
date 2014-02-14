@@ -4,3 +4,6 @@
 [submodule "stringencoding"]
 	path = stringencoding
 	url = https://github.com/peerlibrary/stringencoding.git
+[submodule "jasmine"]
+	path = jasmine
+	url = https://github.com/peerlibrary/jasmine.git

@@ -5,7 +5,7 @@ jsdom = Npm.require 'jsdom'
 vm = Npm.require 'vm'
 xmldom = Npm.require 'xmldom'
 
-DEBUG = false
+DEBUG = true
 
 # SHARED + DISPLAY + CORE
 # TODO: Reuse variables from package.js
@@ -52,6 +52,8 @@ SRC_FILES = [
 #  ProcessExternalResources: false
 
 @runInServerBrowser = (context, files, initialDom) ->
+  PDFJS = context.PDFJS
+
   window = jsdom.jsdom(initialDom).createWindow()
   window.btoa = btoa
   window.atob = atob
@@ -69,6 +71,8 @@ SRC_FILES = [
     log: (args...) ->
       console.log args... if DEBUG
 
+      return unless PDFJS.throwExceptionOnWarning
+
       # We ignore this warning
       return if args[0] is 'Warning: Setting up fake worker.'
 
@@ -82,6 +86,8 @@ SRC_FILES = [
 
     warn: (args...) ->
       console.warn args... if DEBUG
+
+      return unless PDFJS.throwExceptionOnWarning
 
       # We throw an exception for any warning (PDF.js does not seem to really use them)
       throw new Meteor.Error 500, args
@@ -107,9 +113,9 @@ SRC_FILES = [
   vmContext
 
 @newPDFJS = ->
-  PDFJS = {}
-
-  PDFJS.pdfBug = DEBUG
+  PDFJS =
+    throwExceptionOnWarning: true # Our flag to be able to disable throwing exceptions for tests which do not expect that
+    pdfBug: DEBUG
 
   vmContext = runInServerBrowser {PDFJS: PDFJS}, (content: Assets.getText(filename), filename: filename for filename in SRC_FILES)
 
@@ -149,6 +155,8 @@ SRC_FILES = [
     vmContext.PDFPageProxy.prototype.render.apply(this, args).promise
 
   PDFJS.UnsupportedManager.listen (msg) ->
+    return unless PDFJS.throwExceptionOnWarning
+
     # We throw an exception for anything unsupported
     throw new Meteor.Error 500, "Unsupported feature", msg
 

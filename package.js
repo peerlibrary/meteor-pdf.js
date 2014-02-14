@@ -108,7 +108,28 @@ Package.on_test(function (api) {
   ], 'server', {isAsset: true});
 
   api.add_files([
-    'tests_features.coffee'
+    'pdf.js/test/unit/api_spec.js',
+    'pdf.js/test/unit/cmap_spec.js',
+    'pdf.js/test/unit/crypto_spec.js',
+    'pdf.js/test/unit/evaluator_spec.js',
+    'pdf.js/test/unit/font_spec.js',
+    'pdf.js/test/unit/function_spec.js',
+    'pdf.js/test/unit/metadata_spec.js',
+    'pdf.js/test/unit/obj_spec.js',
+    'pdf.js/test/unit/parser_spec.js',
+    'pdf.js/test/unit/stream_spec.js',
+    'pdf.js/test/unit/util_spec.js'
+  ], 'server', {isAsset: true});
+
+  api.add_files([
+    'pdf.js/external/jasmine/jasmine.js',
+    'jasmine/src/console/ConsoleReporter.js',
+    'tests_unit_runner.js'
+  ], 'server', {isAsset: true});
+
+  api.add_files([
+    'tests_features.coffee',
+    'tests_unit.coffee'
   ], 'server');
 
   api.add_files('tests.coffee', ['client', 'server']);
