@@ -118,7 +118,8 @@ Package.on_test(function (api) {
     'pdf.js/test/unit/obj_spec.js',
     'pdf.js/test/unit/parser_spec.js',
     'pdf.js/test/unit/stream_spec.js',
-    'pdf.js/test/unit/util_spec.js'
+    'pdf.js/test/unit/util_spec.js',
+    'pdf.js/test/pdfs/basicapi.pdf'
   ], 'server', {isAsset: true});
 
   api.add_files([
