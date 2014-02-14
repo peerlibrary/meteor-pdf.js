@@ -1,5 +1,3 @@
-PDFJS = {}
-
 btoa = Npm.require 'btoa'
 atob = Npm.require 'atob'
 canvas = Npm.require 'canvas'
@@ -8,8 +6,6 @@ vm = Npm.require 'vm'
 xmldom = Npm.require 'xmldom'
 
 DEBUG = false
-
-PDFJS.pdfBug = DEBUG
 
 # SHARED + DISPLAY + CORE
 # TODO: Reuse variables from package.js
@@ -110,52 +106,59 @@ SRC_FILES = [
 
   vmContext
 
-vmContext = runInServerBrowser {PDFJS: PDFJS}, (content: Assets.getText(filename), filename: filename for filename in SRC_FILES)
+@newPDFJS = ->
+  PDFJS = {}
 
-# We store it into PDFJS so that users of our library do not have to depend on it and Npm.require it
-PDFJS.canvas = canvas
+  PDFJS.pdfBug = DEBUG
 
-originalLegacyThen = PDFJS.LegacyPromise.prototype.then
-PDFJS.LegacyPromise.prototype.then = (onResolve, onReject) ->
-  onResolve = bindEnvironment onResolve, this if _.isFunction onResolve
-  onReject = bindEnvironment onReject, this if _.isFunction onReject
-  originalLegacyThen.call this, onResolve, onReject
+  vmContext = runInServerBrowser {PDFJS: PDFJS}, (content: Assets.getText(filename), filename: filename for filename in SRC_FILES)
 
-originalThen = vmContext.Promise.prototype.then
-vmContext.Promise.prototype.then = (onResolve, onReject) ->
-  onResolve = bindEnvironment onResolve, this if _.isFunction onResolve
-  onReject = bindEnvironment onReject, this if _.isFunction onReject
-  originalThen.call this, onResolve, onReject
+  # We store it into PDFJS so that users of our library do not have to depend on it and Npm.require it
+  PDFJS.canvas = canvas
 
-wrap = (obj) ->
-  # We iterate manually and not with underscore because it does not support
-  # getters and setters: https://github.com/jashkenas/underscore/issues/1270
-  for name of obj
-    continue if /^_/.test name # We skip private members
-    continue if name is 'render' # PDFPageProxy.render is a special case not returning promise directly
-    descriptor = Object.getOwnPropertyDescriptor(obj, name)
-    continue if descriptor.get or descriptor.set # We skip getters and setters
-    continue unless _.isFunction obj[name]
-    obj["#{ name }Sync"] = wrapAsync obj[name]
+  originalLegacyThen = PDFJS.LegacyPromise.prototype.then
+  PDFJS.LegacyPromise.prototype.then = (onResolve, onReject) ->
+    onResolve = bindEnvironment onResolve, this if _.isFunction onResolve
+    onReject = bindEnvironment onReject, this if _.isFunction onReject
+    originalLegacyThen.call this, onResolve, onReject
 
-# Wrap public API into future-enabled API
-PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument
-wrap vmContext.PDFDocumentProxy.prototype
-wrap vmContext.PDFPageProxy.prototype
+  originalThen = vmContext.Promise.prototype.then
+  vmContext.Promise.prototype.then = (onResolve, onReject) ->
+    onResolve = bindEnvironment onResolve, this if _.isFunction onResolve
+    onReject = bindEnvironment onReject, this if _.isFunction onReject
+    originalThen.call this, onResolve, onReject
 
-# PDFPageProxy.render is a special case not returning promise directly
-vmContext.PDFPageProxy.prototype.renderSync = wrapAsync (args...) ->
-  vmContext.PDFPageProxy.prototype.render.apply(this, args).promise
+  wrap = (obj) ->
+    # We iterate manually and not with underscore because it does not support
+    # getters and setters: https://github.com/jashkenas/underscore/issues/1270
+    for name of obj
+      continue if /^_/.test name # We skip private members
+      continue if name is 'render' # PDFPageProxy.render is a special case not returning promise directly
+      descriptor = Object.getOwnPropertyDescriptor(obj, name)
+      continue if descriptor.get or descriptor.set # We skip getters and setters
+      continue unless _.isFunction obj[name]
+      obj["#{ name }Sync"] = wrapAsync obj[name]
 
-PDFJS.UnsupportedManager.listen (msg) ->
-  # We throw an exception for anything unsupported
-  throw new Meteor.Error 500, "Unsupported feature", msg
+  # Wrap public API into future-enabled API
+  PDFJS.getDocumentSync = wrapAsync PDFJS.getDocument
+  wrap vmContext.PDFDocumentProxy.prototype
+  wrap vmContext.PDFPageProxy.prototype
 
-PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.infos if DEBUG
+  # PDFPageProxy.render is a special case not returning promise directly
+  vmContext.PDFPageProxy.prototype.renderSync = wrapAsync (args...) ->
+    vmContext.PDFPageProxy.prototype.render.apply(this, args).promise
 
-# We already have all the files loaded so we fake the promise as resolved to prevent
-# PDF.js from trying by itself and failing because there is no real browser
-PDFJS.fakeWorkerFilesLoadedPromise = new PDFJS.LegacyPromise()
-PDFJS.fakeWorkerFilesLoadedPromise.resolve()
+  PDFJS.UnsupportedManager.listen (msg) ->
+    # We throw an exception for anything unsupported
+    throw new Meteor.Error 500, "Unsupported feature", msg
 
-@PDFJS = PDFJS
+  PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.infos if DEBUG
+
+  # We already have all the files loaded so we fake the promise as resolved to prevent
+  # PDF.js from trying by itself and failing because there is no real browser
+  PDFJS.fakeWorkerFilesLoadedPromise = new PDFJS.LegacyPromise()
+  PDFJS.fakeWorkerFilesLoadedPromise.resolve()
+
+  [PDFJS, vmContext]
+
+[PDFJS, vmContext] = @newPDFJS()
