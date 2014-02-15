@@ -5,7 +5,7 @@ jsdom = Npm.require 'jsdom'
 vm = Npm.require 'vm'
 xmldom = Npm.require 'xmldom'
 
-DEBUG = true
+DEBUG = false
 
 # SHARED + DISPLAY + CORE
 # TODO: Reuse variables from package.js
