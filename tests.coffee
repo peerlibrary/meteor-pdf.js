@@ -29,10 +29,6 @@ Tinytest.addAsync 'meteor-pdf.js - general', (test, onComplete) ->
     , /Page index 14 not found/
 
   processPDF = (document) ->
-    console.log arguments
-    for key, value of document
-      console.log key, value
-
     test.equal document.numPages, 14
     onComplete()
 
