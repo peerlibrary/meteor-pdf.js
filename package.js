@@ -75,7 +75,7 @@ Package.on_use(function (api) {
   // Client files
   api.add_files([
     'client.js',
-    //'pdf.js/web/compatibility.js'
+    'pdf.js/web/compatibility.js'
   ], 'client', {bare: true});
   api.add_files(SHARED, 'client', {bare: true});
   api.add_files(DISPLAY, 'client', {bare: true});
@@ -134,10 +134,6 @@ Package.on_test(function (api) {
   ], 'server');
 
   api.add_files('tests.coffee', ['client', 'server']);
-
-  api.add_files([
-    'phantomjs.coffee'
-  ], 'client');
 
   api.add_files([
     'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
