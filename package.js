@@ -75,7 +75,7 @@ Package.on_use(function (api) {
   // Client files
   api.add_files([
     'client.js',
-    'pdf.js/web/compatibility.js'
+    //'pdf.js/web/compatibility.js'
   ], 'client', {bare: true});
   api.add_files(SHARED, 'client', {bare: true});
   api.add_files(DISPLAY, 'client', {bare: true});
