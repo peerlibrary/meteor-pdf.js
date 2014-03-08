@@ -21,21 +21,30 @@ If not ussing [Assets](http://docs.meteor.com/#assets) to get PDF, you should us
 package for file system access to get fibers-enabled synchronous functions instead of functions which block the
 whole node.js process.
 
-It requires some additional [node.js](http://nodejs.org/) packages which will be automatically installed
+It requires some additional [node.js](http://nodejs.org/) packages which will be automatically locally installed
 from [npm](http://nodejs.org/) when your Meteor application is run for fhe first time.
-[Cairo](http://cairographics.org/) graphic library is required for this and you
-might have to configure environment properly so that it can be successfully compiled.
 
-On Mac OS X you can get Cairo by installing [X11](http://xquartz.macosforge.org/) and
-run the following before you run `mrt` to configure environment:
+The following libraries have to be available on your system for packages to be successfully installed:
+
+ * [Cairo](http://cairographics.org/) graphic library
+ * [FreeType](http://www.freetype.org/)
+ * [Pango](http://www.pango.org/)
+ * [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config/)
+
+On Mac OS X you can get Cairo by installing [X11](http://xquartz.macosforge.org/) (Pango
+and FreeType are already available on the system) and run the following before you
+run `mrt` to configure the environment:
 
     export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig
 
-To be able to compile libraries, you need [Xcode](https://developer.apple.com/xcode/)
-with command line tools installed (from _Preferences_ > _Downloads_ > _Components_),
-and `pkg-config` as well. The latter you can install using [Homebrew](http://brew.sh/)
-([MacPorts](https://www.macports.org/) also works, if you prefer it).
+To be able to compile dependencies, you need [Xcode](https://developer.apple.com/xcode/)
+with command line tools installed (from _Preferences_ > _Downloads_ > _Components_).
 
-On Debian you can install:
+You can install `pkg-config` using [Homebrew](http://brew.sh/) ([MacPorts](https://www.macports.org/)
+also works, if you prefer it):
+
+    brew install pkg-config
+
+On Debian you can install all dependencies by:
 
     sudo aptitude install libcairo2-dev libfreetype6-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
