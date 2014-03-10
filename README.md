@@ -5,7 +5,7 @@ Meteor smart package for [pdf.js](https://github.com/mozilla/pdf.js), Mozilla's 
 reader built with HTML5 and JavaScript that powers the PDF display in Firefox.
 
 Adding this package to your [Meteor](http://www.meteor.com/) application adds `PDFJS` object into the global scope,
-which you can use as defined in [pdf.js API](https://github.com/mozilla/pdf.js/blob/master/src/api.js).
+which you can use as defined in [pdf.js API](https://github.com/mozilla/pdf.js/blob/master/src/display/api.js).
 On the server, in addition to existing API, a fibers-enabled synchronous ([blocking](https://github.com/peerlibrary/meteor-blocking))
 methods are added to objects. They are named the same, but with a `Sync` suffix. Instead of returning a promise they
 return when they finish or throw an exception. So, on the server you can do:
