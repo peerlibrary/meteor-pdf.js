@@ -64,7 +64,8 @@ var CORE = [
 
 Package.on_use(function (api) {
   api.use(['coffeescript', 'underscore'], 'server');
-
+  api.use('digest', 'client');
+  api.imply('digest');
   api.export('PDFJS');
 
   api.add_files([
