@@ -9,4 +9,4 @@
 	url = https://github.com/peerlibrary/jasmine.git
 [submodule "digest.js"]
 	path = digest.js
-	url = git@github.com:jcsirot/digest.js.git
+	url = https://github.com/peerlibrary/digest.js
