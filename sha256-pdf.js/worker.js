@@ -1,17 +1,6 @@
-importScripts('digest.js/digest.js');
-
-var fixedPathImportScripts = (function (originalImportScripts) {
-  return function(src){
-    return originalImportScripts("pdf.js/src/" + src);
-  };
-})(importScripts);
-
-importScripts = function(src){
-  fixedPathImportScripts(src);
-}
-
-importScripts('worker_loader.js');
-
+/*
+  Extends MessageHandler instance with aditional message handle.
+*/
 handler.on('GetSHA256', function(data, deferred){
   var ah = handler.actionHandler;
   var action = ah['GetData'];

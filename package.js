@@ -99,8 +99,11 @@ Package.on_use(function (api) {
   ], 'server', {isAsset: true});
 
   // patch pdf.js to get sha256 digest calculated in there
-  api.add_files('patch.js', 'client', {bare: true});
-  api.add_files('worker_loader.js', 'client', {isAsset: true});
+  api.add_files('sha256-pdf.js/api.js', 'client', {bare: true});
+  api.add_files([
+    'sha256-pdf.js/worker_loader.js',
+    'sha256-pdf.js/worker.js'
+    ], 'client', {isAsset: true});
   api.add_files('digest.js/digest.js', 'client', {isAsset: true});
 });
 
