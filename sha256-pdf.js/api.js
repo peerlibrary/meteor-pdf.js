@@ -7,7 +7,7 @@ PDFDocumentProxy.prototype.sha256 = function PDFDocumentProxy_sha256(){
 };
 
 WorkerTransport.prototype.sha256 = function WorkerTransport_sha256(promise) {
-  return this.messageHandler.send('GetSHA256', null, function(data) {
-    return promise.resolve(data);
+  return this.messageHandler.send('GetSHA256', null, function(sha256) {
+    return promise.resolve(sha256);
   });
 };
