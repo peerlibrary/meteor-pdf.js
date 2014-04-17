@@ -1,7 +1,7 @@
 /*
   Extends MessageHandler instance with aditional message handle.
 */
-handler.on('GetSHA256', function(data, deferred){
+handler.on('GetSHA256', function wphSetupGetSHA256(data, deferred){
   var ah = handler.actionHandler;
   var action = ah['GetData'];
   var deferred_data = {};
