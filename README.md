@@ -3,6 +3,8 @@ pdf.js smart package
 
 Meteor smart package for [pdf.js](https://github.com/mozilla/pdf.js), Mozilla's PDF
 reader built with HTML5 and JavaScript that powers the PDF display in Firefox.
+Now as a Meteor package for both client and server side. This package just renders
+PDFs not creates them.
 
 Adding this package to your [Meteor](http://www.meteor.com/) application adds `PDFJS` object into the global scope,
 which you can use as defined in [pdf.js API](https://github.com/mozilla/pdf.js/blob/master/src/display/api.js).
@@ -17,7 +19,7 @@ return when they finish or throw an exception. So, on the server you can do:
     var document = PDFJS.getDocumentSync(pdf);
     var page = document.getPageSync(1);
 
-If not ussing [Assets](http://docs.meteor.com/#assets) to get PDF, you should use [fs](https://github.com/peerlibrary/meteor-fs)
+If not using [Assets](http://docs.meteor.com/#assets) to get PDF, you should use [fs](https://github.com/peerlibrary/meteor-fs)
 package for file system access to get fibers-enabled synchronous functions instead of functions which block the
 whole node.js process.
 
