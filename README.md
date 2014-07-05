@@ -23,6 +23,13 @@ If not using [Assets](http://docs.meteor.com/#assets) to get PDF, you should use
 package for file system access to get fibers-enabled synchronous functions instead of functions which block the
 whole node.js process.
 
+Installation
+------------
+
+```
+mrt add pdf.js
+```
+
 It requires some additional [node.js](http://nodejs.org/) packages which will be automatically locally installed
 from [npm](http://nodejs.org/) when your Meteor application is run for fhe first time.
 
