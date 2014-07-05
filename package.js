@@ -1,5 +1,5 @@
 Package.describe({
-  summary: "Mozilla's HTML5&JavaScript PDF reader, repackaged for Meteor"
+  summary: "Mozilla's HTML5 PDF reader, repackaged for Meteor, client & server"
 });
 
 // Initialization of environment

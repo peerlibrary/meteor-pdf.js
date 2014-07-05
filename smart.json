@@ -1,6 +1,6 @@
 {
   "name": "pdf.js",
-  "description": "Mozilla's HTML5&JavaScript PDF reader, repackaged for Meteor",
+  "description": "Mozilla's HTML5 PDF reader, repackaged for Meteor, client & server",
   "homepage": "https://github.com/peerlibrary/meteor-pdf.js",
   "author": "The PeerLibrary Project",
   "version": "0.8.1003-1",
