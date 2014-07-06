@@ -35,7 +35,7 @@ for t, i in vmContext.tests when t.id not in IGNORED_TESTS and t.area not in ['V
   all++
 
   do (t, i) ->
-    Tinytest.addAsync "meteor-pdf.js - features - #{ t.id }", (test, onComplete) ->
+    Tinytest.addAsync "pdf.js - features - #{ t.id }", (test, onComplete) ->
       try
         # We get a new test instance based on i to make sure we have a test
         # from currently initialized vmContext and not one from a closure

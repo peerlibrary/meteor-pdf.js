@@ -26,7 +26,7 @@ UNIT_TESTS = [
 
 for unitTest in UNIT_TESTS
   do (unitTest) ->
-    Tinytest.addAsync "meteor-pdf.js - unit tests - #{ path.basename unitTest }", (test, onComplete) ->
+    Tinytest.addAsync "pdf.js - unit tests - #{ path.basename unitTest }", (test, onComplete) ->
       [PDFJS, vmContext] = newPDFJS()
 
       PDFJS.throwExceptionOnWarning = false
