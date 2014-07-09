@@ -1,5 +1,5 @@
-testRoot = '/packages/pdf.js'
-pdfFilename = 'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
+TEST_ROOT = '/packages/pdf.js'
+PDF_FILENAME = 'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
 
 Tinytest.addAsync 'pdf.js - general', (test, onComplete) ->
   isDefined = false
@@ -12,10 +12,10 @@ Tinytest.addAsync 'pdf.js - general', (test, onComplete) ->
 
   if Meteor.isClient
     # Random query parameter to prevent caching
-    pdf = "#{ testRoot }/#{ pdfFilename }?#{ Random.id() }"
+    pdf = "#{ TEST_ROOT }/#{ PDF_FILENAME }?#{ Random.id() }"
   else
     pdf =
-      data: Assets.getBinary pdfFilename
+      data: Assets.getBinary PDF_FILENAME
       password: ''
 
     document = PDFJS.getDocumentSync(pdf)
