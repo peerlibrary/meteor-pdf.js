@@ -11,39 +11,39 @@ DEBUG = false
 # TODO: Reuse variables from package.js
 # TODO: Add web/compatibility.js?
 SRC_FILES = [
-  'pdf.js/src/shared/util.js',
-  'pdf.js/src/shared/colorspace.js',
-  'pdf.js/src/shared/function.js',
+  'pdf.js/src/shared/util.js'
+  'pdf.js/src/shared/colorspace.js'
+  'pdf.js/src/shared/function.js'
   'pdf.js/src/shared/annotation.js'
-  'pdf.js/src/display/api.js',
-  'pdf.js/src/display/metadata.js',
-  'pdf.js/src/display/canvas.js',
-  'pdf.js/src/display/pattern_helper.js',
+  'pdf.js/src/display/api.js'
+  'pdf.js/src/display/metadata.js'
+  'pdf.js/src/display/canvas.js'
+  'pdf.js/src/display/pattern_helper.js'
   'pdf.js/src/display/font_loader.js'
-  'pdf.js/src/core/network.js',
-  'pdf.js/src/core/chunked_stream.js',
-  'pdf.js/src/core/pdf_manager.js',
-  'pdf.js/src/core/core.js',
-  'pdf.js/src/core/obj.js',
-  'pdf.js/src/core/charsets.js',
-  'pdf.js/src/core/cidmaps.js',
-  'pdf.js/src/core/crypto.js',
-  'pdf.js/src/core/pattern.js',
-  'pdf.js/src/core/evaluator.js',
-  'pdf.js/src/core/fonts.js',
-  'pdf.js/src/core/font_renderer.js',
-  'pdf.js/src/core/glyphlist.js',
-  'pdf.js/src/core/image.js',
-  'pdf.js/src/core/metrics.js',
-  'pdf.js/src/core/parser.js',
-  'pdf.js/src/core/ps_parser.js',
-  'pdf.js/src/core/stream.js',
-  'pdf.js/src/core/worker.js',
-  'pdf.js/src/core/jpx.js',
-  'pdf.js/src/core/jbig2.js',
-  'pdf.js/src/core/bidi.js',
-  'pdf.js/src/core/cmap.js',
-  'pdf.js/external/jpgjs/jpg.js',
+  'pdf.js/src/core/network.js'
+  'pdf.js/src/core/chunked_stream.js'
+  'pdf.js/src/core/pdf_manager.js'
+  'pdf.js/src/core/core.js'
+  'pdf.js/src/core/obj.js'
+  'pdf.js/src/core/charsets.js'
+  'pdf.js/src/core/cidmaps.js'
+  'pdf.js/src/core/crypto.js'
+  'pdf.js/src/core/pattern.js'
+  'pdf.js/src/core/evaluator.js'
+  'pdf.js/src/core/fonts.js'
+  'pdf.js/src/core/font_renderer.js'
+  'pdf.js/src/core/glyphlist.js'
+  'pdf.js/src/core/image.js'
+  'pdf.js/src/core/metrics.js'
+  'pdf.js/src/core/parser.js'
+  'pdf.js/src/core/ps_parser.js'
+  'pdf.js/src/core/stream.js'
+  'pdf.js/src/core/worker.js'
+  'pdf.js/src/core/jpx.js'
+  'pdf.js/src/core/jbig2.js'
+  'pdf.js/src/core/bidi.js'
+  'pdf.js/src/core/cmap.js'
+  'pdf.js/external/jpgjs/jpg.js'
 ]
 
 # TODO: Disable fetching external resources once fixed in jsdom https://github.com/tmpvar/jsdom/issues/743
