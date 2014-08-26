@@ -5,6 +5,10 @@ jsdom = Npm.require 'jsdom'
 vm = Npm.require 'vm'
 xmldom = Npm.require 'xmldom'
 
+throw new Error "node-canvas compiled without Cairo" unless canvas.cairoVersion
+throw new Error "node-canvas compiled without JPEG" unless canvas.jpegVersion
+throw new Error "node-canvas compiled without GIF" unless canvas.gifVersion
+
 DEBUG = false
 
 # SHARED + DISPLAY + CORE
