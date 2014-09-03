@@ -13,7 +13,7 @@ Package.describe({
 Npm.depends({
   btoa: "1.1.1",
   atob: "1.1.0",
-  canvas: "https://github.com/peerlibrary/node-canvas/tarball/76bbe247fadb370ed295641c34e063fdcf95e215",
+  canvas: "1.1.6",
   jsdom: "0.10.1",
   xmldom: "0.1.19"
 });
