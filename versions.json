@@ -9,6 +9,10 @@
       "1.0.3"
     ],
     [
+      "peerlibrary:pdf.js",
+      "0.8.1003-6"
+    ],
+    [
       "underscore",
       "1.0.0"
     ]
