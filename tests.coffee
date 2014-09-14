@@ -1,4 +1,4 @@
-TEST_ROOT = '/packages/pdf.js'
+TEST_ROOT = '/packages/peerlibrary:pdf.js'
 PDF_FILENAME = 'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
 
 Tinytest.addAsync 'pdf.js - general', (test, onComplete) ->
@@ -8,7 +8,7 @@ Tinytest.addAsync 'pdf.js - general', (test, onComplete) ->
     isDefined = true
 
   test.isTrue isDefined, "PDFJS is not defined"
-  test.isTrue Package['pdf.js'].PDFJS, "Package.pdf.js.PDFJS is not defined"
+  test.isTrue Package['peerlibrary:pdf.js'].PDFJS, "Package.peerlibrary:pdf.js.PDFJS is not defined"
 
   if Meteor.isClient
     # Random query parameter to prevent caching
