@@ -1,6 +1,6 @@
 [submodule "pdf.js"]
 	path = pdf.js
-	url = git://github.com/peerlibrary/pdf.js.git
+	url = https://github.com/peerlibrary/pdf.js.git
 [submodule "stringencoding"]
 	path = stringencoding
 	url = https://github.com/peerlibrary/stringencoding.git
