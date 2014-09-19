@@ -39,6 +39,8 @@ The following libraries have to be available on your system for packages to be s
  * [FreeType](http://www.freetype.org/)
  * [Pango](http://www.pango.org/)
  * [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config/)
+ * [giflib](http://giflib.sourceforge.net/)
+ * [libjpeg](http://www.ijg.org)
 
 On Mac OS X you can get Cairo by installing [X11](http://xquartz.macosforge.org/) (Pango
 and FreeType are already available on the system) and run the following before you
@@ -49,10 +51,10 @@ run `mrt` to configure the environment:
 To be able to compile dependencies, you need [Xcode](https://developer.apple.com/xcode/)
 with command line tools installed (from _Preferences_ > _Downloads_ > _Components_).
 
-You can install `pkg-config` using [Homebrew](http://brew.sh/) ([MacPorts](https://www.macports.org/)
-also works, if you prefer it):
+You can install `pkg-config`, `giflib`, and `libjpeg` using [Homebrew](http://brew.sh/)
+([MacPorts](https://www.macports.org/) also works, if you prefer it):
 
-    brew install pkg-config
+    brew install pkg-config giflib libjpeg
 
 On Debian you can install all dependencies by:
 
