@@ -1,6 +1,17 @@
-CLIENT_TEST_ROOT = '/packages/peerlibrary:pdf.js'
-SERVER_TEST_ROOT = 'file:///'
+if Meteor.isClient
+  TEST_ROOT = '/packages/peerlibrary_pdf.js'
+else
+  TEST_ROOT = 'file:///'
 PDF_FILENAME = 'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
+
+Meteor.startup ->
+  # If tests are run from the package directory itself, package is prepend local-test.
+  # We run this in Meteor.startup so that all Package information is populated.
+  TEST_ROOT = '/packages/local-test_peerlibrary_pdf.js' if Meteor.isClient and Package['local-test:peerlibrary:pdf.js']
+
+# We explicitly disable worker on PhantomJS
+# See https://github.com/mozilla/pdf.js/issues/5316
+PDFJS.disableWorker = true if Meteor.isClient and window.navigator.userAgent.indexOf('PhantomJS') > -1
 
 TEXT_CONTENT = [
   'Trace-based Just-in-Time Type Specialization for Dynamic'
@@ -167,7 +178,7 @@ Tinytest.add 'pdf.js - defined', (test) ->
 
 if Meteor.isServer
   Tinytest.add 'pdf.js - sync interface', (test) ->
-    pdf = "#{ SERVER_TEST_ROOT }/#{ PDF_FILENAME }"
+    pdf = "#{ TEST_ROOT }/#{ PDF_FILENAME }"
 
     document = PDFJS.getDocumentSync(pdf)
     test.equal document.numPages, 14
@@ -202,11 +213,8 @@ promiseHandler = (promise, test, expect, fun) ->
 
 testAsyncMulti 'pdf.js - callback interface', [
   (test, expect) ->
-    if Meteor.isClient
-      # Random query parameter to prevent caching
-      pdf = "#{ CLIENT_TEST_ROOT }/#{ PDF_FILENAME }?#{ Random.id() }"
-    else
-      pdf = "#{ SERVER_TEST_ROOT }/#{ PDF_FILENAME }"
+    # Random query parameter to prevent caching
+    pdf = "#{ TEST_ROOT }/#{ PDF_FILENAME }?#{ Random.id() }"
 
     promiseHandler PDFJS.getDocument(pdf), test, expect, (document) =>
       test.equal document.numPages, 14
