@@ -229,9 +229,6 @@ SRC_FILES = [
 
   PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.infos if DEBUG
 
-  # We disable worker on the server
-  PDFJS.disableWorker = true
-
   # We already have all the files loaded so we fake the promise
   # as resolved to prevent PDF.js from trying by itself again
   PDFJS.fakeWorkerFilesLoadedCapability = new PDFJS.createPromiseCapability()
