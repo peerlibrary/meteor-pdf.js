@@ -8,3 +8,6 @@
 	path = jasmine
 	url = https://github.com/peerlibrary/jasmine.git
 	branch = peerlibrary
+[submodule "node-xhr2"]
+	path = node-xhr2
+	url = https://github.com/peerlibrary/node-xhr2.git
