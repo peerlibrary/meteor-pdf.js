@@ -1,12 +1,13 @@
 [submodule "pdf.js"]
 	path = pdf.js
-	url = git://github.com/peerlibrary/pdf.js.git
+	url = https://github.com/peerlibrary/pdf.js.git
 [submodule "stringencoding"]
 	path = stringencoding
 	url = https://github.com/peerlibrary/stringencoding.git
 [submodule "jasmine"]
 	path = jasmine
 	url = https://github.com/peerlibrary/jasmine.git
+	branch = peerlibrary
 [submodule "node-xhr2"]
 	path = node-xhr2
 	url = https://github.com/peerlibrary/node-xhr2.git
