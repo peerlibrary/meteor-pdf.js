@@ -74,7 +74,9 @@ SRC_FILES = [
 
   class LocalFilesXMLHttpRequest extends XMLHttpRequest
     _sendRelative: (data) ->
-      fullUrl = urlModule.resolve '/pdf.js/test/unit/', @_url.href
+      throw Error "Relative URL without base URL" unless baseUrl
+
+      fullUrl = urlModule.resolve baseUrl, @_url.href
       @_url = @_parseUrl fullUrl
 
       @_sendFile data
@@ -107,13 +109,17 @@ SRC_FILES = [
         try
           data = new Buffer Assets.getBinary filename
         catch error
-          # Asset not among package assets, try context assets (like tests assets)
-          try
-            data = new Buffer assets.getBinary filename
-          catch error
-            # Asset not even among context assets
+          unless assets
             data = new Buffer "#{ error }"
             status = 404
+          else
+            # Asset not among package assets, try context assets (like tests assets)
+            try
+              data = new Buffer assets.getBinary filename
+            catch error
+              # Asset not even among context assets
+              data = new Buffer "#{ error }"
+              status = 404
 
         @_response = null
         @status = status
@@ -236,5 +242,4 @@ SRC_FILES = [
 
   [PDFJS, vmContext]
 
-# TODO: Not sure what is the best base URL to use here
-[PDFJS, vmContext] = @newPDFJS 'file:///pdf.js/test/unit/', Assets
+[PDFJS, vmContext] = @newPDFJS null, Assets

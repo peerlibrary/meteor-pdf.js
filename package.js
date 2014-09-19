@@ -280,6 +280,13 @@ Package.on_use(function (api) {
     'stringencoding/encoding-indexes.js',
     'stringencoding/encoding.js'
   ], 'server', {isAsset: true});
+
+  // For testing purposes, it has to be here so that main PDFJS instance
+  // on the server has access to it when we are running tests (assets
+  // are accessed from the package code, not tests code)
+  api.add_files([
+    'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
+  ], 'server', {isAsset: true});
 });
 
 Package.on_test(function (api) {
