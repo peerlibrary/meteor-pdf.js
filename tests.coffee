@@ -9,6 +9,10 @@ Meteor.startup ->
   # We run this in Meteor.startup so that all Package information is populated.
   TEST_ROOT = '/packages/local-test_pdf.js' if Meteor.isClient and Package['local-test:pdf.js']
 
+# We explicitly disable worker on PhantomJS
+# See https://github.com/mozilla/pdf.js/issues/5316
+PDFJS.disableWorker = true if Meteor.isClient and window.navigator.userAgent.indexOf('PhantomJS') > -1
+
 TEXT_CONTENT = [
   'Trace-based Just-in-Time Type Specialization for Dynamic'
   'Languages'
