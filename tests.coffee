@@ -25,7 +25,7 @@ Tinytest.addAsync 'pdf.js - general', (test, onComplete) ->
 
     test.throws ->
       document.getPageSync 15
-    , /Page index 14 not found/
+    , /Invalid page request/
 
   processPDF = (document) ->
     test.equal document.numPages, 14
