@@ -27,19 +27,12 @@ UNIT_TESTS = [
 for unitTest in UNIT_TESTS
   do (unitTest) ->
     Tinytest.addAsync "pdf.js - unit tests - #{ path.basename unitTest }", (test, onComplete) ->
-      [PDFJS, vmContext] = newPDFJS()
+      [PDFJS, vmContext] = newPDFJS 'file:///pdf.js/test/unit/', Assets
 
       PDFJS.throwExceptionOnWarning = false
 
       vmContext.test = test
       vmContext.onComplete = onComplete
-
-      originalCombineUrl = vmContext.combineUrl
-      vmContext.combineUrl = (baseUrl, url) ->
-        return originalCombineUrl baseUrl, url unless url is '../pdfs/basicapi.pdf'
-
-        # Instead of passing an URL, we give a PDF directly so that XMLHttpRequest is not attempted (we do not support it on the server)
-        data: Assets.getBinary 'pdf.js/test/pdfs/basicapi.pdf'
 
       for file in JASMINE
         vm.runInContext Assets.getText(file), vmContext, file

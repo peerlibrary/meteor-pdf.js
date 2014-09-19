@@ -1,5 +1,4 @@
 IGNORED_TESTS = [
-  'XMLHttpRequest-response' # Not using XMLHttpRequest on the server, we do not support it on the server
   'fillRule-evenodd' # TODO: Implement support in node-canvas: https://github.com/LearnBoost/node-canvas/issues/384
   'dash-array' # TODO: Implement support in node-canvas: https://github.com/LearnBoost/node-canvas/pull/373
   'font-face' # TODO: Implement support in jsdom and node-canvas: https://github.com/tmpvar/jsdom/issues/744
@@ -14,7 +13,7 @@ IGNORED_TESTS = [
 ]
 
 initialize = ->
-  runInServerBrowser {}, [{
+  runInServerBrowser 'file:///pdf.js/test/features/', Assets, {}, [{
     content: Assets.getText 'pdf.js/test/features/tests.js'
     filename: 'pdf.js/test/features/tests.js'
   }], Assets.getText 'pdf.js/test/features/index.html'

@@ -11,28 +11,28 @@ Package.describe({
 })();
 
 Npm.depends({
-  btoa: "1.1.1",
-  atob: "1.1.0",
-  canvas: "1.1.6",
-  jsdom: "0.10.1",
-  xmldom: "0.1.19"
+  btoa: '1.1.2',
+  atob: '1.1.2',
+  canvas: '1.1.6',
+  jsdom: '0.11.1',
+  xmldom: '0.1.19'
 });
 
 // The following lists are based on pdf.js/make.js
 
 SHARED = [
-  'pdf.js/src/shared/util.js',
-  'pdf.js/src/shared/colorspace.js',
-  'pdf.js/src/shared/function.js',
-  'pdf.js/src/shared/annotation.js'
+  'pdf.js/src/shared/util.js'
 ];
 
 var DISPLAY = [
   'pdf.js/src/display/api.js',
   'pdf.js/src/display/metadata.js',
   'pdf.js/src/display/canvas.js',
+  'pdf.js/src/display/webgl.js',
   'pdf.js/src/display/pattern_helper.js',
-  'pdf.js/src/display/font_loader.js'
+  'pdf.js/src/display/font_loader.js',
+  'pdf.js/src/display/annotation_helper.js',
+  'pdf.js/src/display/svg.js'
 ];
 
 var CORE = [
@@ -42,10 +42,13 @@ var CORE = [
   'pdf.js/src/core/core.js',
   'pdf.js/src/core/obj.js',
   'pdf.js/src/core/charsets.js',
-  'pdf.js/src/core/cidmaps.js',
+  'pdf.js/src/core/annotation.js',
+  'pdf.js/src/core/function.js',
+  'pdf.js/src/core/colorspace.js',
   'pdf.js/src/core/crypto.js',
   'pdf.js/src/core/pattern.js',
   'pdf.js/src/core/evaluator.js',
+  'pdf.js/src/core/cmap.js',
   'pdf.js/src/core/fonts.js',
   'pdf.js/src/core/font_renderer.js',
   'pdf.js/src/core/glyphlist.js',
@@ -55,11 +58,16 @@ var CORE = [
   'pdf.js/src/core/ps_parser.js',
   'pdf.js/src/core/stream.js',
   'pdf.js/src/core/worker.js',
+  'pdf.js/src/core/arithmetic_decoder.js',
+  'pdf.js/src/core/jpg.js',
   'pdf.js/src/core/jpx.js',
   'pdf.js/src/core/jbig2.js',
   'pdf.js/src/core/bidi.js',
-  'pdf.js/src/core/cmap.js',
-  'pdf.js/external/jpgjs/jpg.js'
+  'pdf.js/src/core/murmurhash3.js'
+];
+
+var BCMAPS = [
+  'pdf.js/external/bcmaps/Adobe-Japan1-1.bcmap'
 ];
 
 Package.on_use(function (api) {
@@ -68,6 +76,12 @@ Package.on_use(function (api) {
   api.export('PDFJS');
 
   api.add_files([
+    'xhr2-compatibility.js',
+    'node-xhr2/src/000-xml_http_request_event_target.coffee',
+    'node-xhr2/src/001-xml_http_request.coffee',
+    'node-xhr2/src/errors.coffee',
+    'node-xhr2/src/progress_event.coffee',
+    'node-xhr2/src/xml_http_request_upload.coffee',
     'wrap.js',
     'server.coffee'
   ], 'server');
@@ -88,6 +102,8 @@ Package.on_use(function (api) {
     'pdf.js/src/worker_loader.js',
     'pdf.js/web/images/loading-icon.gif'
   ], 'client', {isAsset: true});
+
+  api.add_files(BCMAPS, ['client', 'server'], {isAsset: true});
 
   // The rest of files for the server side
   api.add_files(DISPLAY, 'server', {isAsset: true});

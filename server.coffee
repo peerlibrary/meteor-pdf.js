@@ -1,3 +1,7 @@
+http = Npm.require 'http'
+path = Npm.require 'path'
+urlModule = Npm.require 'url'
+
 btoa = Npm.require 'btoa'
 atob = Npm.require 'atob'
 canvas = Npm.require 'canvas'
@@ -16,24 +20,27 @@ DEBUG = false
 # TODO: Add web/compatibility.js?
 SRC_FILES = [
   'pdf.js/src/shared/util.js'
-  'pdf.js/src/shared/colorspace.js'
-  'pdf.js/src/shared/function.js'
-  'pdf.js/src/shared/annotation.js'
   'pdf.js/src/display/api.js'
   'pdf.js/src/display/metadata.js'
   'pdf.js/src/display/canvas.js'
+  'pdf.js/src/display/webgl.js'
   'pdf.js/src/display/pattern_helper.js'
   'pdf.js/src/display/font_loader.js'
+  'pdf.js/src/display/annotation_helper.js'
+  'pdf.js/src/display/svg.js'
   'pdf.js/src/core/network.js'
   'pdf.js/src/core/chunked_stream.js'
   'pdf.js/src/core/pdf_manager.js'
   'pdf.js/src/core/core.js'
   'pdf.js/src/core/obj.js'
   'pdf.js/src/core/charsets.js'
-  'pdf.js/src/core/cidmaps.js'
+  'pdf.js/src/core/annotation.js'
+  'pdf.js/src/core/function.js'
+  'pdf.js/src/core/colorspace.js'
   'pdf.js/src/core/crypto.js'
   'pdf.js/src/core/pattern.js'
   'pdf.js/src/core/evaluator.js'
+  'pdf.js/src/core/cmap.js'
   'pdf.js/src/core/fonts.js'
   'pdf.js/src/core/font_renderer.js'
   'pdf.js/src/core/glyphlist.js'
@@ -43,11 +50,12 @@ SRC_FILES = [
   'pdf.js/src/core/ps_parser.js'
   'pdf.js/src/core/stream.js'
   'pdf.js/src/core/worker.js'
+  'pdf.js/src/core/arithmetic_decoder.js'
+  'pdf.js/src/core/jpg.js',
   'pdf.js/src/core/jpx.js'
   'pdf.js/src/core/jbig2.js'
   'pdf.js/src/core/bidi.js'
-  'pdf.js/src/core/cmap.js'
-  'pdf.js/external/jpgjs/jpg.js'
+  'pdf.js/src/core/murmurhash3.js'
 ]
 
 # TODO: Disable fetching external resources once fixed in jsdom https://github.com/tmpvar/jsdom/issues/743
@@ -55,14 +63,70 @@ SRC_FILES = [
 #  FetchExternalResources: false
 #  ProcessExternalResources: false
 
-@runInServerBrowser = (context, files, initialDom) ->
+@runInServerBrowser = (baseUrl, assets, context, files, initialDom) ->
   PDFJS = context.PDFJS
 
-  window = jsdom.jsdom(initialDom).createWindow()
+  window = jsdom.jsdom(initialDom, null, {url: baseUrl}).createWindow()
   window.btoa = btoa
   window.atob = atob
   window.DOMParser = xmldom.DOMParser
   window.Image = canvas.Image
+
+  class LocalFilesXMLHttpRequest extends XMLHttpRequest
+    _sendRelative: (data) ->
+      fullUrl = urlModule.resolve '/pdf.js/test/unit/', @_url.href
+      @_url = @_parseUrl fullUrl
+
+      @_sendFile data
+
+    _sendFile: (data) ->
+      unless @_method is 'GET'
+        throw new XMLHttpRequest.NetworkError "The file protocol only supports GET"
+
+      if data? and (@_method is 'GET' or @_method is 'HEAD')
+        console.warn "Discarding entity body for #{ @_method } requests"
+        data = null
+      else
+        # Send Content-Length: 0
+        data or= ''
+
+      @upload._setData data
+      @_finalizeHeaders()
+
+      @_request = null
+      @_dispatchProgress 'loadstart'
+
+      if @_sync
+        defer = (f) ->
+          f()
+      else
+        defer = Meteor.defer
+
+      defer =>
+        filename = path.normalize(@_url.pathname).substr(1)
+        try
+          data = new Buffer Assets.getBinary filename
+        catch error
+          # Asset not among package assets, try context assets (like tests assets)
+          try
+            data = new Buffer assets.getBinary filename
+          catch error
+            # Asset not even among context assets
+            data = new Buffer "#{ error }"
+            status = 404
+
+        @_response = null
+        @status = status
+        @statusText = http.STATUS_CODES[@status]
+        @_totalBytes = data.length
+        @_lengthComputable = true
+
+        @_setReadyState XMLHttpRequest.HEADERS_RECEIVED
+
+        @_onHttpResponseData null, data
+        @_onHttpResponseEnd null
+
+  window.XMLHttpRequest = LocalFilesXMLHttpRequest
 
   window.setTimeout = wrappedSetTimeout
   window.setInterval = wrappedSetInterval
@@ -116,27 +180,26 @@ SRC_FILES = [
 
   vmContext
 
-@newPDFJS = ->
+@newPDFJS = (baseUrl, assets) ->
   PDFJS =
     throwExceptionOnWarning: true # Our flag to be able to disable throwing exceptions for tests which do not expect that
     pdfBug: DEBUG
 
-  vmContext = runInServerBrowser {PDFJS: PDFJS}, (content: Assets.getText(filename), filename: filename for filename in SRC_FILES)
+  vmContext = runInServerBrowser baseUrl, assets, {PDFJS: PDFJS}, (content: Assets.getText(filename), filename: filename for filename in SRC_FILES)
 
   # We store it into PDFJS so that users of our library do not have to depend on it and Npm.require it
   PDFJS.canvas = canvas
-
-  originalLegacyThen = PDFJS.LegacyPromise.prototype.then
-  PDFJS.LegacyPromise.prototype.then = (onResolve, onReject) ->
-    onResolve = bindEnvironment onResolve, this if _.isFunction onResolve
-    onReject = bindEnvironment onReject, this if _.isFunction onReject
-    originalLegacyThen.call this, onResolve, onReject
 
   originalThen = vmContext.Promise.prototype.then
   vmContext.Promise.prototype.then = (onResolve, onReject) ->
     onResolve = bindEnvironment onResolve, this if _.isFunction onResolve
     onReject = bindEnvironment onReject, this if _.isFunction onReject
     originalThen.call this, onResolve, onReject
+
+  originalCatch = vmContext.Promise.prototype.catch
+  vmContext.Promise.prototype.catch = (onReject) ->
+    onReject = bindEnvironment onReject, this if _.isFunction onReject
+    originalCatch.call this, onReject
 
   wrap = (obj) ->
     # We iterate manually and not with underscore because it does not support
@@ -166,11 +229,15 @@ SRC_FILES = [
 
   PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.infos if DEBUG
 
-  # We already have all the files loaded so we fake the promise as resolved to prevent
-  # PDF.js from trying by itself and failing because there is no real browser
-  PDFJS.fakeWorkerFilesLoadedPromise = new PDFJS.LegacyPromise()
-  PDFJS.fakeWorkerFilesLoadedPromise.resolve()
+  # We disable worker on the server
+  PDFJS.disableWorker = true
+
+  # We already have all the files loaded so we fake the promise
+  # as resolved to prevent PDF.js from trying by itself again
+  PDFJS.fakeWorkerFilesLoadedCapability = new PDFJS.createPromiseCapability()
+  PDFJS.fakeWorkerFilesLoadedCapability.resolve()
 
   [PDFJS, vmContext]
 
-[PDFJS, vmContext] = @newPDFJS()
+# TODO: Not sure what is the best base URL to use here
+[PDFJS, vmContext] = @newPDFJS 'file:///pdf.js/test/unit/', Assets
