@@ -329,6 +329,8 @@ Package.on_test(function (api) {
 
   api.add_files('tests.coffee', ['client', 'server']);
 
+  api.add_files('test-page.png', 'server', {isAsset: true});
+
   api.add_files([
     'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
   ], ['client', 'server'], {isAsset: true});

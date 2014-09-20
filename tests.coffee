@@ -177,7 +177,7 @@ Tinytest.add 'pdf.js - defined', (test) ->
   test.isTrue Package['pdf.js'].PDFJS, "Package.pdf.js.PDFJS is not defined"
 
 if Meteor.isServer
-  Tinytest.add 'pdf.js - sync interface', (test) ->
+  Tinytest.addAsync 'pdf.js - sync interface', (test, onComplete) ->
     pdf = "#{ TEST_ROOT }/#{ PDF_FILENAME }"
 
     document = PDFJS.getDocumentSync(pdf)
@@ -192,6 +192,27 @@ if Meteor.isServer
 
     textContent = page.getTextContentSync()
     test.equal _.pluck(textContent.items, 'str'), TEXT_CONTENT
+
+    viewport = page.getViewport 1.0
+    canvasElement = new PDFJS.canvas viewport.width, viewport.height
+    canvasContext = canvasElement.getContext '2d'
+
+    page.renderSync
+      canvasContext: canvasContext
+      viewport: viewport
+
+    testPagePngBuffer = new Buffer Assets.getBinary 'test-page.png'
+
+    pngStream = canvasElement.pngStream().pipe(PDFJS.through())
+
+    buffers = []
+    pngStream.on 'data', (data) -> buffers.push data
+    pngStream.on 'end', Meteor.bindEnvironment ->
+      pngStreamBuffer = Buffer.concat buffers
+
+      test.equal pngStreamBuffer, testPagePngBuffer
+
+      onComplete()
 
 promiseHandler = (promise, test, expect, fun) ->
   expectReturn = expect()
