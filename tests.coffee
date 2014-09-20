@@ -211,7 +211,7 @@ if Meteor.isServer
     testPageCanvas.getContext('2d').drawImage testPageImage, 0, 0, viewport.width, viewport.height
 
     imagediff = Npm.require 'imagediff'
-    test.isTrue imagediff.equal canvasElement, testPageCanvas, viewport.width * viewport.height * 0.01 # 1% difference is OK
+    test.isTrue imagediff.equal canvasElement, testPageCanvas, viewport.width * viewport.height * 0.001 # 0.1% difference is OK
 
 promiseHandler = (promise, test, expect, fun) ->
   expectReturn = expect()
