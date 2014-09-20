@@ -16,7 +16,8 @@ Npm.depends({
   canvas: '1.1.6',
   jsdom: '0.11.1',
   xmldom: '0.1.19',
-  through: '2.3.6'
+  through: '2.3.6',
+  imagediff: '1.0.7'
 });
 
 // The following lists are based on pdf.js/make.js
