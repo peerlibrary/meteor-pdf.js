@@ -295,7 +295,7 @@ Package.on_use(function (api) {
 });
 
 Package.on_test(function (api) {
-  api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'random'], ['client', 'server']);
+  api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'random', 'http'], ['client', 'server']);
 
   api.add_files([
     'pdf.js/test/features/tests.js',
@@ -333,6 +333,7 @@ Package.on_test(function (api) {
   api.add_files('test-page.png', 'server', {isAsset: true});
 
   api.add_files([
+    'test-page.json',
     'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
   ], ['client', 'server'], {isAsset: true});
 });
