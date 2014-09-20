@@ -8,6 +8,7 @@ canvas = Npm.require 'canvas'
 jsdom = Npm.require 'jsdom'
 vm = Npm.require 'vm'
 xmldom = Npm.require 'xmldom'
+through = Npm.require 'through'
 
 throw new Error "node-canvas compiled without Cairo" unless canvas.cairoVersion
 throw new Error "node-canvas compiled without JPEG" unless canvas.jpegVersion
@@ -17,8 +18,8 @@ DEBUG = false
 
 # SHARED + DISPLAY + CORE
 # TODO: Reuse variables from package.js
-# TODO: Add web/compatibility.js?
 SRC_FILES = [
+  'pdf.js/web/compatibility.js'
   'pdf.js/src/shared/util.js'
   'pdf.js/src/display/api.js'
   'pdf.js/src/display/metadata.js'
@@ -71,6 +72,7 @@ SRC_FILES = [
   window.atob = atob
   window.DOMParser = xmldom.DOMParser
   window.Image = canvas.Image
+  window.CanvasPixelArray = canvas.PixelArray
 
   class LocalFilesXMLHttpRequest extends XMLHttpRequest
     _sendRelative: (data) ->
@@ -150,6 +152,9 @@ SRC_FILES = [
       # We ignore this warning
       return if args[0] is 'Warning: Setting up fake worker.'
 
+      # TODO: Implement support for custom fonts, see https://github.com/peerlibrary/meteor-pdf.js/issues/7
+      return if args[0] is 'Warning: Load test font never loaded.'
+
       # But we throw an exception for any other warning or error
       throw new Meteor.Error 500, args if /^(Warning|Error): /.test args[0]
 
@@ -195,6 +200,11 @@ SRC_FILES = [
 
   # We store it into PDFJS so that users of our library do not have to depend on it and Npm.require it
   PDFJS.canvas = canvas
+
+  # canvas.pngStream is underdefined and is missing methods (like pause).
+  # One can use through package to fix that, so we are providing it here.
+  # See https://github.com/Automattic/node-canvas/issues/232#issuecomment-56253111
+  PDFJS.through = through
 
   originalThen = vmContext.Promise.prototype.then
   vmContext.Promise.prototype.then = (onResolve, onReject) ->

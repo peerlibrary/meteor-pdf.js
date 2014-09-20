@@ -15,7 +15,8 @@ Npm.depends({
   atob: '1.1.2',
   canvas: '1.1.6',
   jsdom: '0.11.1',
-  xmldom: '0.1.19'
+  xmldom: '0.1.19',
+  through: '2.3.6'
 });
 
 // The following lists are based on pdf.js/make.js
@@ -260,6 +261,9 @@ Package.on_use(function (api) {
   ], 'client', {bare: true});
   api.add_files(SHARED, 'client', {bare: true});
   api.add_files(DISPLAY, 'client', {bare: true});
+
+  // We need compatibility on the server side as well
+  api.add_files('pdf.js/web/compatibility.js', 'server', {isAsset: true});
 
   // Worker files have to be available directly
   // We need them on the server side as well
