@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Mozilla's HTML5 PDF reader, repackaged for Meteor, client & server",
-  version: '1.0.791-2',
+  version: '1.0.791-3',
   name: 'peerlibrary:pdf.js',
   git: 'https://github.com/peerlibrary/meteor-pdf.js.git'
 });
@@ -18,7 +18,9 @@ Npm.depends({
   atob: '1.1.2',
   canvas: '1.1.6',
   jsdom: '0.11.1',
-  xmldom: '0.1.19'
+  xmldom: '0.1.19',
+  through: '2.3.6',
+  imagediff: '1.0.7'
 });
 
 // The following lists are based on pdf.js/make.js
@@ -265,6 +267,9 @@ Package.on_use(function (api) {
   api.add_files(SHARED, 'client', {bare: true});
   api.add_files(DISPLAY, 'client', {bare: true});
 
+  // We need compatibility on the server side as well
+  api.add_files('pdf.js/web/compatibility.js', 'server', {isAsset: true});
+
   // Worker files have to be available directly
   // We need them on the server side as well
   api.add_files(SHARED, ['client', 'server'], {isAsset: true});
@@ -294,7 +299,7 @@ Package.on_use(function (api) {
 });
 
 Package.on_test(function (api) {
-  api.use(['peerlibrary:pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'random'], ['client', 'server']);
+  api.use(['peerlibrary:pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'random', 'http'], ['client', 'server']);
 
   api.add_files([
     'pdf.js/test/features/tests.js',
@@ -329,7 +334,10 @@ Package.on_test(function (api) {
 
   api.add_files('tests.coffee', ['client', 'server']);
 
+  api.add_files('test-page.png', 'server', {isAsset: true});
+
   api.add_files([
+    'test-page.json',
     'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
   ], ['client', 'server'], {isAsset: true});
 });
