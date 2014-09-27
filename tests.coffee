@@ -1,13 +1,8 @@
 if Meteor.isClient
-  TEST_ROOT = '/packages/peerlibrary_pdf.js'
+  TEST_ROOT = '/packages/local-test_peerlibrary_pdf.js'
 else
   TEST_ROOT = 'file:///'
 PDF_FILENAME = 'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
-
-Meteor.startup ->
-  # If tests are run from the package directory itself, package is prepend local-test.
-  # We run this in Meteor.startup so that all Package information is populated.
-  TEST_ROOT = '/packages/local-test_peerlibrary_pdf.js' if Meteor.isClient and Package['local-test:peerlibrary:pdf.js']
 
 # We explicitly disable worker on PhantomJS
 # See https://github.com/mozilla/pdf.js/issues/5316
