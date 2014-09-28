@@ -126,11 +126,11 @@ testAsyncMulti 'pdf.js - callback interface', [
       test.length annotations, 0
 ,
   (test, expect) ->
-    test.expect_fail ->
-      promiseHandler @page.getPage(15), test, expect, (page) =>
-        # We should never get here, so we run a test which succeeds and this will
-        # in fact fail the test because we are expecting a failure, not success
-        test.equal 42, 42
+    test.expect_fail()
+    promiseHandler @document.getPage(15), test, expect, (page) =>
+      # We should never get here, so we run a test which succeeds and this will
+      # in fact fail the test because we are expecting a failure, not success
+      test.equal 42, 42
 ,
   (test, expect) ->
     promiseHandler @page.getTextContent(), test, expect, (textContent) =>
