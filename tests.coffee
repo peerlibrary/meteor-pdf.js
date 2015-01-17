@@ -1,13 +1,8 @@
 if Meteor.isClient
-  TEST_ROOT = '/packages/pdf.js'
+  TEST_ROOT = '/packages/local-test_peerlibrary_pdf.js'
 else
   TEST_ROOT = 'file:///'
 PDF_FILENAME = 'pdf.js/web/compressed.tracemonkey-pldi-09.pdf'
-
-Meteor.startup ->
-  # If tests are run from the package directory itself, package is prepend local-test.
-  # We run this in Meteor.startup so that all Package information is populated.
-  TEST_ROOT = '/packages/local-test_pdf.js' if Meteor.isClient and Package['local-test:pdf.js']
 
 # We explicitly disable worker on PhantomJS
 # See https://github.com/mozilla/pdf.js/issues/5316
@@ -50,7 +45,7 @@ Tinytest.add 'pdf.js - defined', (test) ->
     isDefined = true
 
   test.isTrue isDefined, "PDFJS is not defined"
-  test.isTrue Package['pdf.js'].PDFJS, "Package.pdf.js.PDFJS is not defined"
+  test.isTrue Package['peerlibrary:pdf.js'].PDFJS, "Package.peerlibrary:pdf.js.PDFJS is not defined"
 
 if Meteor.isServer
   Tinytest.add 'pdf.js - sync interface', (test) ->

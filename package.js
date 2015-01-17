@@ -1,5 +1,8 @@
 Package.describe({
-  summary: "Mozilla's HTML5 PDF reader, repackaged for Meteor, client & server"
+  summary: "Mozilla's HTML5 PDF reader, repackaged for Meteor, client & server",
+  version: '1.0.791_4',
+  name: 'peerlibrary:pdf.js',
+  git: 'https://github.com/peerlibrary/meteor-pdf.js.git'
 });
 
 // Initialization of environment
@@ -240,6 +243,7 @@ var BCMAPS = [
 ];
 
 Package.on_use(function (api) {
+  api.versionsFrom('METEOR@0.9.3');
   api.use(['coffeescript', 'underscore'], 'server');
 
   api.export('PDFJS');
@@ -295,7 +299,7 @@ Package.on_use(function (api) {
 });
 
 Package.on_test(function (api) {
-  api.use(['pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'random', 'http'], ['client', 'server']);
+  api.use(['peerlibrary:pdf.js', 'tinytest', 'test-helpers', 'coffeescript', 'random', 'http'], ['client', 'server']);
 
   api.add_files([
     'pdf.js/test/features/tests.js',
