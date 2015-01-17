@@ -30,10 +30,13 @@ Installation
 meteor add peerlibrary:pdf.js
 ```
 
-It requires some additional [node.js](http://nodejs.org/) packages which will be automatically locally installed
-from [npm](http://nodejs.org/) when your Meteor application is run for fhe first time.
+Building
+--------
 
-The following libraries have to be available on your system for packages to be successfully installed:
+It requires some additional [node.js](http://nodejs.org/) packages which will be automatically locally installed
+from [npm](http://nodejs.org/) when Meteor builds the package for the first time.
+
+The following libraries have to be available on your system for packages to be successfully built:
 
  * [Cairo](http://cairographics.org/) graphic library
  * [FreeType](http://www.freetype.org/)
