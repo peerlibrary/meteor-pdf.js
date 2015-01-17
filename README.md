@@ -27,7 +27,7 @@ Installation
 ------------
 
 ```
-mrt add pdf.js
+meteor add peerlibrary:pdf.js
 ```
 
 It requires some additional [node.js](http://nodejs.org/) packages which will be automatically locally installed
